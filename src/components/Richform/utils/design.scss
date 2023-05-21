@@ -1,0 +1,46 @@
+.richform {
+    // 操作
+    .design-draggable,
+    .design-delete,
+    .design-copy {
+        display: inline-block;
+        position: absolute;
+        width: 22px;
+        height: 26px;
+        line-height: 26px;
+        color: #fff;
+        background: #409eff;
+        text-align: center;
+        cursor: pointer;
+        z-index: 99999;
+    }
+    .design-draggable {
+        left: 0;
+        top: 0;
+        z-index: 99;
+        cursor: move;
+    }
+    .design-copy {
+        right: 27px;
+        bottom: 0;
+        z-index: 99;
+    }
+    .design-delete {
+        right: 3px;
+        bottom: 0;
+        z-index: 99;
+    }
+    // 拖拽过程配置
+    .design-draggable-ghost {
+        border-top: 5px solid #f56c6c;
+    }
+    // https://github.com/SortableJS/Vue.Draggable/issues/1008#issuecomment-782545024
+    .base-component-item {
+        width: 100%;
+        display: inline-block;
+        text-indent: -9999px;
+    }
+    .design-sortable-drag {
+        background: #f4dec9;
+    }
+}

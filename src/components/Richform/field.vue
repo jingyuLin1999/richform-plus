@@ -1,0 +1,487 @@
+<!--
+  字段组件
+
+-->
+<template>
+  <!-- 不能用v-if，否则若开始为隐藏，后续无法切换 -->
+  <div v-show="!field.hide" :class="['field-wrapper', field.name, form.grid ? 'field-border-top' : '']">
+    <div :class="[
+      'field',
+      form.labelInline ? 'label-inline' : '',
+      form.grid ? 'field-border' : '',
+      field.activeDesign && isDesign ? 'active-design' : '',
+      form.labelInline && !form.grid ? 'inline-no-grid' : '',
+    ]" @click="onClickedItem(field)">
+      <div v-show="field.widget != 'button'" ref="fieldTitle" :class="[
+        'title-wrapper',
+        'label-' + (form.labelAlign || 'right'),
+        form.labelInline ? 'label-hori' : 'label-vert',
+      ]" :style="{
+  width: form.labelInline
+    ? isShyTitle
+      ? form.labelWidth
+      : '0px'
+    : '100%',
+}">
+        <div ref="fieldLabel" v-if="isShyTitle" :class="[
+          'label-title',
+          fieldSchema.require || requireds.includes(field.name)
+            ? 'required-field'
+            : '',
+        ]" :style="{ color: colors.fontColor }">
+          {{ fieldTitle }}
+        </div>
+        <span class="label-suffix" :style="{ color: colors.fontColor }" v-if="
+          isShyTitle &&
+          form.labelSuffix.length > 0 &&
+          Object.keys(this.field).length > 0
+        ">{{ form.labelSuffix }}</span>
+        <ElTooltip v-if="fieldSchema.description || field.description"
+          :content="fieldSchema.description || field.description" class="field-question" placement="bottom"
+          :effect="isDark ? 'dark' : 'light'">
+          <i class="el-icon-question"></i>
+        </ElTooltip>
+      </div>
+      <div v-if="form.grid && form.labelInline" v-show="isShyTitle" class="label-right-border"
+        :style="{ height: lableRightBorder + 'px' }"></div>
+      <div ref="fieldValue" :class="[
+        'field-value',
+        isDesign ? 'field-mask' : '',
+        !form.labelInline ? 'field-value-vert' : 'field-value-hori',
+      ]">
+        <component :is="asyncComponent" :form="form" :schema="fieldSchema" :values="values" :field="field"
+          :colors="colors" :fieldErrors="fieldErrors" :hideFields="hideFields" :isDark="isDark" @change="onChange"
+          @buttonEvent="onButtonEvent" />
+        <!-- 错误信息 -->
+        <div class="error-message" v-if="fieldErrors[field.name] && field.showError != false">
+          <i class="el-icon-warning-outline"></i>
+          <span>{{ fieldErrors[field.name] }}</span>
+        </div>
+      </div>
+    </div>
+    <!--拖拽-->
+    <span class="design-draggable design-handle-move" v-if="isDesign && field.isClicked">
+      <el-icon>
+        <Rank />
+      </el-icon>
+    </span>
+    <!--复制-->
+    <span class="design-copy" @click="onCopyItem(schema)" v-if="isDesign && field.isClicked">
+      <el-icon>
+        <CopyDocument />
+      </el-icon>
+    </span>
+    <!--删除-->
+    <span class="design-delete" v-if="isDesign && field.isClicked" @click="onDeleteItem(form, field)">
+      <el-icon>
+        <Delete />
+      </el-icon>
+    </span>
+  </div>
+</template>
+
+<script>
+import { path, pick } from "ramda";
+import { defineComponent, toRaw } from "vue";
+import { ElTooltip } from "element-plus";
+import eventbus from "./utils/eventbus";
+import { defineAsyncComponent } from 'vue';
+import DesignMixin from "./utils/designMixin";
+import CommonMixin from "./utils/commonMixin";
+import elementResizeDetectorMaker from "element-resize-detector";
+import AJV, { localize as localizeErrors } from "./utils/validator";
+
+
+export default defineComponent({
+  name: "field",
+  components: { ElTooltip },
+  inject: [
+    "globalVars",
+    "dependencies",
+    "requireds",
+    "isDeepValues",
+    "regExpFields",
+    "pickDeepValueKeys",
+    "flatFields",
+  ],
+  mixins: [DesignMixin, CommonMixin],
+  props: {
+    schema: { type: Object, default: () => ({}) },
+    field: { type: Object, default: () => ({}) }, // 布局字段
+    isDesign: { type: Boolean, default: false },
+    form: { type: Object, default: () => ({}) },
+    values: { type: Object, default: () => ({}) },
+    fieldErrors: { type: Object, default: () => ({}) },
+    hideFields: { type: Object, default: () => ({}) },
+    colors: { type: Object, default: () => ({}) },
+    isDark: { type: Boolean, default: false },
+    isFriendValue: { type: Boolean, default: true },
+  },
+  data() {
+    return {
+      fieldSchema: {}, // 字段的schema
+      lableRightBorder: 48, // 标签右侧的边
+      errorFieldsHistory: [], // 记录上一次历史错误字段，用于消除本次必填和错误信息
+      fieldGrandfatherSchema: null, // schema的爷爷对象
+    };
+  },
+  mounted() {
+    this.load();
+  },
+  computed: {
+    asyncComponent() {
+      let rawFieldSchema = toRaw(this.fieldSchema);
+      let widget = this.field.widget || rawFieldSchema.widget;
+      if (!widget) return;
+      return defineAsyncComponent(() =>
+        import(`./widgets/${widget}.vue`)
+      )
+    },
+    fieldTitle() {
+      this.pickSchema();
+      let rawFieldSchema = toRaw(this.fieldSchema);
+      return this.field.title || rawFieldSchema.title;
+    },
+    isShyTitle() {
+      // 隐藏标签
+      let rawField = toRaw(this.field);
+      return !(rawField.showTitle != undefined && !rawField.showTitle);
+    },
+  },
+  methods: {
+    load() {
+      this.pickSchema();
+      this.pickRequireds();
+      this.createValue();
+      this.listenFieldEl();
+    },
+    listenFieldEl() {
+      this.detector = elementResizeDetectorMaker();
+      this.detector.listenTo(this.$refs.fieldValue, (element) => {
+        let titleHeight = this.$refs.fieldTitle.offsetHeight;
+        let valueHeight = element.offsetHeight < 40 ? 40 : element.offsetHeight;
+        let height = Math.max(titleHeight, valueHeight);
+        this.lableRightBorder = height + 8;
+      });
+      this.detector.listenTo(this.$refs.fieldTitle, (element) => {
+        let titleHeight = element.offsetHeight < 40 ? 40 : element.offsetHeight;
+        let valueHeight = this.$refs.fieldValue.offsetHeight;
+        let height = Math.max(titleHeight, valueHeight);
+        this.lableRightBorder = height + 8;
+      });
+    },
+    emit() {
+      // 全局总线
+      if (arguments.length > 0) {
+        eventbus.$emit(`${this.formId}:${arguments[0]}`, arguments[1]);
+      }
+    },
+    pickSchema() {
+      // schema不是必须的,若无field就无法查找
+      let rawSchema = toRaw(this.schema);
+      if (
+        Object.keys(rawSchema).length == 0 ||
+        !Object.keys(this.field).length
+      )
+        return;
+      let schemaKeys = this.field.name
+        .split(".")
+        .join(".properties.")
+        .split(".");
+      schemaKeys.unshift("properties");
+      let lastPropIdx = schemaKeys.lastIndexOf("properties");
+      let schemaObj = rawSchema;
+      for (let index = 0; index < schemaKeys.length; index++) {
+        let key = schemaKeys[index];
+        let value = schemaObj[key];
+        if (value != undefined) schemaObj = value;
+        else {
+          // 不存在则创建对应的schema结构
+          schemaObj[key] = {};
+          schemaObj = schemaObj[key];
+        }
+        if (index == lastPropIdx - 1) {
+          schemaObj.type = "object";
+          if (!schemaObj.required) schemaObj.required = [];
+          this.fieldGrandfatherSchema = schemaObj;
+        }
+      }
+      if (!this.fieldGrandfatherSchema)
+        this.fieldGrandfatherSchema = rawSchema;
+      this.fieldSchema = schemaObj;
+    },
+    pickRequireds() {
+      let rawFieldSchema = toRaw(this.fieldSchema);
+      if (!rawFieldSchema.require && !this.field.require) return;
+      if (!this.requireds.includes(this.field.name))
+        this.requireds.push(this.field.name);
+      // 添加到对应scheme的required字段
+      let schemaRequired = this.field.name.split(".");
+      schemaRequired = schemaRequired[schemaRequired.length - 1];
+      if (!this.fieldGrandfatherSchema.required.includes(schemaRequired))
+        this.fieldGrandfatherSchema.required.push(schemaRequired);
+    },
+    createValue() {
+      if (!this.isFriendValue) return;
+      // 深度模式收集键值
+      if (
+        this.isDeepValues &&
+        !this.pickDeepValueKeys.includes(this.field.name)
+      )
+        this.pickDeepValueKeys.push(this.field.name);
+      // 提供两种模式，树型结构或普通结构
+      // 有值则不需要创建，即values的优先级大于default的值
+      let fieldValue = this.isDeepValues
+        ? path(this.field.name.split("."), this.values)
+        : this.values[this.field.name];
+      if (fieldValue != undefined && fieldValue != null) return;
+      // 是否立即触发验证
+      let defaultValue = this.isDeepValues
+        ? path(this.field.name.split("."), this.values)
+        : this.values[this.field.name] ||
+        this.fieldSchema.default ||
+        this.field.default;
+      // 生成默认值
+      let friendValue =
+        defaultValue != null && defaultValue != undefined
+          ? defaultValue
+          : this.friendDefaultValue(this.fieldSchema.type);
+      if (this.isDeepValues) {
+        this.deepSetValue(
+          this.field.name.split("."),
+          this.values,
+          friendValue,
+          true
+        );
+      } else this.values[this.field.name] = friendValue;
+      // 若有默认值，则需要直接进行校验
+      if (defaultValue)
+        this.validateField(this.field.name, this.fieldSchema, defaultValue);
+    },
+    pickFieldSchema(fieldName) {
+      let rawSchema = toRaw(this.schema);
+      let schemaKeys = fieldName.split(".").join(".properties.").split(".");
+      const fieldSchema =
+        path(schemaKeys, rawSchema.then.properties) ||
+        path(schemaKeys, rawSchema.properties) ||
+        {};
+      return fieldSchema;
+    },
+    removeErrorAndRequire() {
+      // 先根据错误信息
+      this.errorFieldsHistory.map((nameKey) => {
+        // 错误
+        if (this.fieldErrors[nameKey]) delete this.fieldErrors[nameKey];
+      });
+      this.errorFieldsHistory = [];
+    },
+    validateField(fieldName, schema, value) {
+      try {
+        let pickSchema = pick(
+          ["errorMessage", "if", "else", "then", "allOf", "anyOf", "oneOf"],
+          toRaw(this.schema)
+        );
+        let fieldSchema = {
+          type: "object",
+          properties: {},
+          // ...pickSchema,
+        };
+        let schemaKeys = fieldName.split(".").join(".properties.").split(".");
+        schemaKeys.unshift("properties");
+        let fieldSchemaT = fieldSchema;
+        let lastPropIdx = schemaKeys.lastIndexOf("properties");
+        for (let index = 0; index < schemaKeys.length; index++) {
+          let key = schemaKeys[index];
+          let curSchema = fieldSchemaT[key];
+          if (curSchema != undefined) fieldSchemaT = curSchema;
+          else if (index == schemaKeys.length - 1) {
+            fieldSchemaT[key] = schema;
+          } else {
+            fieldSchemaT[key] = {};
+            fieldSchemaT = fieldSchemaT[key];
+          }
+          if (index == lastPropIdx - 1) {
+            fieldSchemaT.type = "object";
+          }
+        }
+
+        let valid = AJV.validate(fieldSchema, toRaw(this.values));
+        localizeErrors(AJV.errors); // 将错误信息转化成中文
+        if (valid) delete this.fieldErrors[fieldName];
+        // 验证正常需要从错误池中移除
+        else {
+          AJV.errors.map((errorItem) => {
+            let fieldName = errorItem.dataPath
+              .split("/")
+              .slice(1, errorItem.dataPath.length)
+              .join(".");
+            // 收集错误字段
+            this.errorFieldsHistory.push(fieldName);
+            // 错误信息收集
+            if (
+              fieldName != this.field.name &&
+              this.fieldErrors[this.field.name]
+            )
+              delete this.fieldErrors[this.field.name]; // 验证正常需要从错误池中移除
+            this.fieldErrors[fieldName] = errorItem.message
+          });
+        }
+      } catch (e) {
+        console.error("单个字段验证错误了：", e);
+      }
+    },
+    onChange(fieldName, value, schema) {
+      if (value == undefined) return;
+      let rawSchema = toRaw(schema);
+      this.emit("field:change", { fieldName, value });
+      this.removeErrorAndRequire();
+      this.validateField(fieldName, rawSchema, value);
+      this.onDispatch(fieldName);
+    },
+    onButtonEvent(info) {
+      this.emit("action", info);
+    },
+  },
+});
+</script>
+
+<style lang="scss">
+@import "./vars.scss";
+
+.field-wrapper {
+  position: relative;
+  color: $field-font-color;
+  box-sizing: border-box;
+
+  .required-field::before {
+    content: "*";
+    color: #f56c6c;
+    margin-right: 0.2em;
+    font-family: Verdana, Arial, Tahoma;
+    font-weight: 400;
+  }
+
+  // 控制标签和字段是否在一行显示
+  >.label-inline {
+    display: flex;
+  }
+
+  >.inline-no-grid {
+    margin-bottom: 4px;
+  }
+
+  >.field-border {
+    border: 1px solid $form-border-color;
+    border-top: 0;
+  }
+
+  >.field {
+    align-items: center;
+    position: relative;
+    min-height: 48px;
+    box-sizing: border-box;
+
+    >.title-wrapper {
+      display: flex;
+      align-items: center;
+      word-break: break-all;
+
+      >.label-title {
+        margin-left: 5px;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+      }
+
+      >.field-question {
+        color: #13ce66;
+        cursor: pointer;
+        margin: 0 5px;
+      }
+    }
+
+    // 标签右对齐
+    .label-right {
+      justify-content: flex-end;
+      padding-right: 4px;
+      box-sizing: border-box;
+    }
+
+    .label-center {
+      justify-content: center;
+      padding-right: 4px;
+      box-sizing: border-box;
+    }
+
+    // 控制标签和字段垂直显示
+    >.label-vert {
+      justify-content: flex-start;
+      padding: 3px 0;
+    }
+
+    >.label-hori {
+      // min-height: 40px;
+    }
+
+    // 设计模式，开启遮罩
+    >.field-mask {
+      width: 100%;
+      position: relative;
+    }
+
+    // 设计模式是否开启遮罩，暂时去掉
+    >.field-mask::before {
+      content: "";
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      z-index: 99;
+      left: 0;
+      top: 0;
+    }
+
+    >.label-right-border {
+      width: 1px;
+      background: $form-border-color;
+    }
+
+    >.field-value {
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+      padding: 0 3px; // 边框,不能改成margin否则会溢出
+      width: 100%;
+      position: relative;
+
+      >.error-message {
+        font-size: 12px;
+        height: 13px;
+        line-height: 13px;
+        color: #e83030;
+        position: absolute;
+        left: 0;
+        bottom: -13px;
+        z-index: 999;
+      }
+    }
+
+    // 当是上下布局时，取消padding-top
+    >.field-value-vert {
+      padding-top: 1px;
+      padding-left: 4px;
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 4px;
+
+      >.error-message {
+        bottom: -13px;
+      }
+    }
+
+    // 去除element自带的margin-bottom
+    .el-form-item {
+      margin: 0;
+    }
+  }
+}
+</style>
