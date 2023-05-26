@@ -4,25 +4,17 @@
 -->
 <template>
   <!-- 不能用v-if，否则若开始为隐藏，后续无法切换 -->
-  <div v-show="!field.hide" :class="['field-wrapper', field.name, form.grid ? 'field-border-top' : '']">
+  <div v-show="!field.hide" :class="['field-wrapper', field.name]">
     <div :class="[
       'field',
-      form.labelInline ? 'label-inline' : '',
+      form.labelInline ? 'label-inline' : 'label-no-inline',
       form.grid ? 'field-border' : '',
       field.activeDesign && isDesign ? 'active-design' : '',
       form.labelInline && !form.grid ? 'inline-no-grid' : '',
     ]" @click="onClickedItem(field)">
-      <div v-show="field.widget != 'button'" ref="fieldTitle" :class="[
-        'title-wrapper',
-        'label-' + (form.labelAlign || 'right'),
-        form.labelInline ? 'label-hori' : 'label-vert',
-      ]" :style="{
-  width: form.labelInline
-    ? isShyTitle
-      ? form.labelWidth
-      : '0px'
-    : '100%',
-}">
+      <div v-show="field.widget != 'button'" ref="fieldTitle"
+        :class="['title-wrapper', 'label-' + (form.labelAlign || 'right'), form.labelInline ? 'label-hori' : 'label-vert',]"
+        :style="{ width: form.labelInline ? isShyTitle ? form.labelWidth : '0px' : '100%' }">
         <div ref="fieldLabel" v-if="isShyTitle" :class="[
           'label-title',
           fieldSchema.require || requireds.includes(field.name)
@@ -90,7 +82,6 @@ import DesignMixin from "./utils/designMixin";
 import CommonMixin from "./utils/commonMixin";
 import elementResizeDetectorMaker from "element-resize-detector";
 import AJV, { localize as localizeErrors } from "./utils/validator";
-
 
 export default defineComponent({
   name: "field",
@@ -364,6 +355,12 @@ export default defineComponent({
   // 控制标签和字段是否在一行显示
   >.label-inline {
     display: flex;
+  }
+
+  >.label-no-inline {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   >.inline-no-grid {

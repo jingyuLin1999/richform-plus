@@ -1,47 +1,18 @@
 <template>
   <div class="upload-widget" :id="widgetId">
     <div class="upload-type" v-if="field.showType">
-      <span class="type-label" :style="{ color: colors.fontColor }"
-        >上传类型：</span
-      >
-      <el-switch
-        style="display: block"
-        v-model="field.type"
-        active-color="#13ce66"
-        inactive-color="#ff4949"
-        active-text="文件夹"
-        inactive-text="文件"
-        active-value="folder"
-        inactive-value="file"
-      >
-      </el-switch>
+      <span class="type-label" :style="{ color: colors.fontColor }">上传类型：</span>
+      <elSwitch style="display: block" v-model="field.type" active-color="#13ce66" inactive-color="#ff4949"
+        active-text="文件夹" inactive-text="文件" active-value="folder" inactive-value="file">
+      </elSwitch>
     </div>
-    <Upload
-      ref="uploadWidget"
-      :name="field.name"
-      :list-type="field.listType"
-      :file-list="fileList"
-      :drag="field.draggable && field.listType == 'text'"
-      :action="field.actions"
-      :multiple="field.multiple"
-      :auto-upload="field.autoUpload"
-      :headers="header"
-      :limit="field.limit"
-      :disabled="field.disabled"
-      :show-file-list="field.showFileList"
-      :accept="field.accept"
-      :before-remove="onBeforeRemove"
-      :on-success="onSuccess"
-      :on-remove="onRemoveSuccess"
-    >
-      <Button v-if="field.listType == 'picture'" size="small" type="primary"
-        >点击上传</Button
-      >
-      <i
-        v-else-if="field.listType == 'picture-card'"
-        slot="default"
-        class="el-icon-plus"
-      ></i>
+    <ElUpload ref="uploadWidget" class="upload-wrapper" :name="field.name" :list-type="field.listType"
+      :file-list="fileList" :drag="field.draggable && field.listType == 'text'" :action="field.actions"
+      :multiple="field.multiple" :auto-upload="field.autoUpload" :headers="header" :limit="field.limit"
+      :disabled="field.disabled" :show-file-list="field.showFileList" :accept="field.accept"
+      :before-remove="onBeforeRemove" :on-success="onSuccess" :on-remove="onRemoveSuccess">
+      <ElButton v-if="field.listType == 'picture'" size="small" type="primary">点击上传</ElButton>
+      <i v-else-if="field.listType == 'picture-card'" slot="default" class="el-icon-plus"></i>
       <div v-else-if="field.listType == 'text'">
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -50,11 +21,7 @@
         {{ field.tips }}
       </div>
       <!-- 查看详情 -->
-      <div
-        v-if="field.listType == 'picture-card'"
-        slot="file"
-        slot-scope="{ file }"
-      >
+      <div v-if="field.listType == 'picture-card'" slot="file" slot-scope="{ file }">
         <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
         <span class="el-upload-list__item-actions">
           <span class="el-upload-list__item-preview">
@@ -65,27 +32,27 @@
           </span>
         </span>
       </div>
-    </Upload>
-    <Dialog :visible.sync="dialogVisible">
+    </ElUpload>
+    <ElDialog :visible.sync="dialogVisible">
       <img width="100%" :src="dialogImageUrl" alt="" />
-    </Dialog>
+    </ElDialog>
   </div>
 </template>
 
 <script>
 import baseMixin from "./baseMixin";
 import {
-  Upload,
-  Message,
-  Button,
-  Dialog,
-  Switch as elSwitch,
+  ElUpload,
+  ElMessage,
+  ElButton,
+  ElDialog,
+  ElSwitch as elSwitch,
 } from "element-plus";
 import { loadDict } from "../utils/index";
 
 export default {
   mixins: [baseMixin],
-  components: { Upload, Message, Button, Dialog, elSwitch },
+  components: { ElUpload, ElMessage, ElButton, ElDialog, elSwitch },
   data() {
     return {
       header: {
@@ -136,11 +103,13 @@ export default {
     },
     // 改变上传的是文件夹还是文件
     onSwitchType(newType = this.field.type) {
-      let isFolder = newType == "folder";
-      if (this.field.listType == "text") {
-        this.$refs.uploadWidget.$children[0].$refs.input.webkitdirectory =
-          isFolder;
-      }
+      this.$nextTick(() => {
+        let isFolder = newType == "folder";
+        if (this.field.listType == "text") {
+          let uploadDom = document.querySelector(`#${this.widgetId} .upload-wrapper input`)
+          if (uploadDom) uploadDom.webkitdirectory = isFolder;
+        }
+      })
     },
     onFileList() {
       if (Array.isArray(this.value) && this.value.length > 0) {
@@ -233,11 +202,14 @@ export default {
 .upload-widget {
   width: 100%;
   overflow: hidden;
+
   .upload-type {
     display: flex;
     align-items: center;
-    height: 23px;
+    height: 25px;
     margin-bottom: 3px;
+    margin-top: 5px;
+
     .type-label {
       font-size: 12px;
     }

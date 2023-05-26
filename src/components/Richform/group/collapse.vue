@@ -9,16 +9,17 @@
     <div v-if="isDesign" class="design-no-collapse" @click="onClickedItem(collapse)"></div>
     <ElCollapse v-model="openCollapseName" @change="onChange">
       <ElCollapseItem :name="collapse.name" class="collapse-item">
-        <template slot="title">
-          <span :style="collapse.style" class="collapse-title">{{
-            collapse.title
-          }}</span>
+        <template #title>
+          <span :style="collapse.style" class="collapse-title">{{ collapse.title }}</span>
         </template>
         <div class="collapse-container">
-          <layout :layout="collapse.fields" :isDesign="isDesign" :form="form" :values="values" :colors="colors"
-            :schema="schema" :fieldErrors="fieldErrors" :hideFields="hideFields" :isFriendValue="isFriendValue"
-            :isDark="isDark"></layout>
-          <actions v-if="Array.isArray(collapse.actions)" :actions="collapse.actions" :isDesign="isDesign"></actions>
+          <component :is="asyncLyaout" :layout="collapse.fields" :isDesign="isDesign" :form="form" :values="values"
+            :colors="colors" :schema="schema" :fieldErrors="fieldErrors" :hideFields="hideFields"
+            :isFriendValue="isFriendValue" :isDark="isDark">
+          </component>
+          <component :is="asyncAction" v-if="Array.isArray(collapse.actions)" :actions="collapse.actions"
+            :isDesign="isDesign">
+          </component>
         </div>
       </ElCollapseItem>
     </ElCollapse>
@@ -44,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, defineAsyncComponent } from "vue";
 import DesignMixin from "../utils/designMixin";
 import { ElCollapse, ElCollapseItem } from "element-plus";
 export default defineComponent({
@@ -59,9 +60,13 @@ export default defineComponent({
       openCollapseName: "",
     };
   },
-  beforeCreate: function () {
-    this.$options.components.Layout = () => import("../layout.vue");
-    this.$options.components.Actions = () => import("../actions.vue");
+  computed: {
+    asyncLyaout() {
+      return defineAsyncComponent(() => import("../layout.vue"))
+    },
+    asyncAction() {
+      return defineAsyncComponent(() => import("../actions.vue"))
+    },
   },
   mounted() {
     this.openCollapse();

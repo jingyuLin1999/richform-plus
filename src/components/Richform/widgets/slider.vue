@@ -1,30 +1,18 @@
 <template>
   <div class="widget-slider" :id="widgetId">
-    <Slider
-      v-model="value"
-      :disabled="field.disabled"
-      :show-tooltip="field.showTooltip"
-      :min="field.minimum"
-      :max="field.maximum"
-      :step="field.step"
-      :height="field.height"
-      :vertical="field.vertical"
-      :show-stops="field.showStop"
-      :show-input="field.showInput"
-      :input-size="field.inputSize"
-      :show-input-controls="field.showInputControls"
-      :range="field.showRange"
-      :marks="field.marks"
-    ></Slider>
+    <ElSlider v-model="value" :disabled="field.disabled" :show-tooltip="field.showTooltip" :min="field.minimum"
+      :max="field.maximum" :step="field.step" :height="field.height" :vertical="field.vertical"
+      :show-stops="field.showStop" :show-input="field.showInput" :input-size="field.inputSize"
+      :show-input-controls="field.showInputControls" :range="field.showRange" :marks="field.marks"></ElSlider>
   </div>
 </template>
 
 <script>
 import baseMixin from "./baseMixin";
-import { Slider } from "element-plus";
+import { ElSlider } from "element-plus";
 export default {
   mixins: [baseMixin],
-  components: { Slider },
+  components: { ElSlider },
   methods: {
     defaultFieldAttr() {
       return {
@@ -35,7 +23,7 @@ export default {
         maximum: 10, // 最大值
         showStop: false, // 显示间断点
         showInput: false, // 是否显示输入框，仅在非范围选择时有效
-        inputSize: "", // large / medium / small / mini
+        inputSize: "default", // "default", "small", "large"
         showInputControls: false, // 在显示输入框的情况下，是否显示输入框的控制按钮
         showRange: false, // 是否为范围选择,此时value必须为 [2,58]
         vertical: false,
@@ -51,7 +39,8 @@ export default {
 .widget-slider {
   width: 100%;
   padding: 0 8px;
-  > .select-widget {
+
+  >.select-widget {
     width: 100%;
   }
 }

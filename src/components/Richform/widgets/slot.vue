@@ -20,3 +20,4 @@ export default {
 .slot-widget {
   width: 100%;
 }
+</style>

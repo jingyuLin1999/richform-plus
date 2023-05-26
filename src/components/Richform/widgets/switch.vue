@@ -1,25 +1,15 @@
 <template>
   <div :id="widgetId">
-    <el-switch
-      class="switch-widget"
-      v-model="value"
-      :width="field.width"
-      :disabled="field.disabled"
-      :active-color="field.activeColor"
-      :inactive-color="field.inactiveColor"
-      :active-text="field.activeText"
-      :inactive-text="field.inactiveText"
-      :active-value="field.activeValue"
-      :inactive-value="field.inactiveValue"
-      :active-icon-class="field.activeIconClass"
-      :inactive-icon-class="field.inactiveIconClass"
-    ></el-switch>
+    <el-switch class="switch-widget" v-model="value" :width="field.width" :disabled="field.disabled"
+      :active-color="field.activeColor" :inactive-color="field.inactiveColor" :active-text="field.activeText"
+      :inactive-text="field.inactiveText" :active-value="field.activeValue" :inactive-value="field.inactiveValue"
+      :active-icon-class="field.activeIconClass" :inactive-icon-class="field.inactiveIconClass"></el-switch>
   </div>
 </template>
 
 <script>
 import baseMixin from "./baseMixin";
-import { Switch as elSwitch } from "element-plus";
+import { ElSwitch as elSwitch } from "element-plus";
 export default {
   mixins: [baseMixin],
   components: { elSwitch },
@@ -45,7 +35,8 @@ export default {
 <style lang="scss">
 .select-widget-wrapper {
   width: 100%;
-  > .select-widget {
+
+  >.select-widget {
     width: 100%;
   }
 }

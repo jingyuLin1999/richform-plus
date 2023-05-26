@@ -1,58 +1,47 @@
 <template>
   <div class="expression-widget">
-    <Popover placement="bottom" title="" trigger="click" ref="popoverRef">
-      <Input
-        :class="['el-form-item', isError ? 'is-error' : '']"
-        ref="expressionInput"
-        v-model="expValue"
-        clearable
-        placeholder="输入条件表达式"
-      ></Input>
+    <ElPopover placement="bottom" title="" :width="635" trigger="click" ref="popoverRef">
+      <ElInput :class="['el-form-item', isError ? 'is-error' : '']" ref="expressionInput" v-model="expValue" clearable
+        placeholder="输入条件表达式">
+      </ElInput>
       <div class="option-container">
         <template v-for="(obj, index) in cardOptions">
           <div class="option-item" :key="index" v-if="obj.show">
-            <div
-              class="title"
-              :style="{ background: form.colors.btnBgColor || '#F5F7FA' }"
-            >
+            <div class="title" :style="{ background: form.colors.btnBgColor || '#F5F7FA' }">
               {{ obj.title }}
             </div>
             <perfect-scrollbar class="option-list">
-              <div
-                v-for="(item, index) in obj.options"
-                :key="index"
-                :class="['option', item.disabled ? 'disabled-option' : '']"
-                @click="clickOption(item)"
-              >
+              <div v-for="(item, index) in obj.options" :key="index"
+                :class="['option', item.disabled ? 'disabled-option' : '']" @click="clickOption(item)">
                 {{ item.label }}
               </div>
             </perfect-scrollbar>
           </div>
         </template>
       </div>
-      <Button slot="reference" :size="field.size" @click="onExpressionBtn">
-        {{ buttonLable }}</Button
-      >
-      <Button type="primary" size="small" class="sure-exp" @click="onSureExp"
-        >确定</Button
-      >
-    </Popover>
+      <ElButton type="primary" size="small" class="sure-exp" @click="onSureExp">确定</ElButton>
+      <template #reference>
+        <ElButton :size="field.size" @click="onExpressionBtn">
+          {{ buttonLable }}
+        </ElButton>
+      </template>
+    </ElPopover>
   </div>
 </template>
 
 <script>
 import baseMixin from "./baseMixin";
-import { Input, Button, Popover } from "element-plus";
+import { ElInput, ElButton, ElPopover } from "element-plus";
 import { PerfectScrollbar } from "vue3-perfect-scrollbar";
 export default {
   mixins: [baseMixin],
-  components: { Input, Button, Popover, PerfectScrollbar },
+  components: { ElInput, ElButton, ElPopover, PerfectScrollbar },
   mounted() {
     this.$nextTick(() => {
       this.validateExpression();
       if (this.$refs.expressionInput)
         this.expressionInputEl =
-          this.$refs.expressionInput.$el.firstElementChild;
+          this.$refs.expressionInput.input
     });
   },
   watch: {
@@ -82,7 +71,7 @@ export default {
   methods: {
     defaultFieldAttr() {
       return {
-        size: "small",
+        size: "default",
         key: {
           title: "字段",
           show: true,
@@ -136,10 +125,10 @@ export default {
       this.expValue = expressionValue;
       await this.$nextTick();
       this.expressionInputEl.focus();
-      this.expressionInputEl.setSelectionRange(
-        newCursorPosition,
-        newCursorPosition
-      );
+      // this.expressionInputEl.setSelectionRange(
+      //   newCursorPosition,
+      //   newCursorPosition
+      // );
     },
     // 校验
     validateExpression(expression) {
@@ -163,7 +152,7 @@ export default {
       if (Array.isArray(this.value)) {
         this.value[this.field.index] = this.expValue;
       } else this.value = this.expValue;
-      this.$refs.popoverRef.doClose();
+      this.$refs.popoverRef.hide();
     },
     onExpressionBtn() {
       if (!this.value || this.buttonLable == "请选择") return;
@@ -186,35 +175,42 @@ export default {
   height: 100%;
   display: flex;
   margin-top: 3px;
-  > .option-item {
+
+  >.option-item {
     min-width: 200px;
     height: 280px;
     margin-right: 3px;
     border: 1px solid #ddd;
-    > .title {
+
+    >.title {
       height: 25px;
       line-height: 25px;
       border-bottom: 1px solid #ddd;
       padding: 0 3px;
       box-sizing: border-box;
     }
-    > .option-list {
+
+    >.option-list {
       height: 255px;
       overflow-y: auto;
-      > .option {
+
+      >.option {
         height: 20px;
         line-height: 20px;
         padding: 0 3px;
         box-sizing: border-box;
       }
-      > .option:hover {
+
+      >.option:hover {
         background: #bbb;
         color: #fff;
       }
-      > .disabled-option {
+
+      >.disabled-option {
         position: relative;
       }
-      > .disabled-option::after {
+
+      >.disabled-option::after {
         content: "";
         background: "#f00";
         z-index: 1000;
@@ -228,6 +224,7 @@ export default {
     }
   }
 }
+
 .sure-exp {
   float: right;
   margin-top: 3px;

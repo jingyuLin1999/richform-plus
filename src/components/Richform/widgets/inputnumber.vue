@@ -1,26 +1,17 @@
 <template>
   <div class="inputnumber-widget" :id="widgetId">
-    <InputNumber
-      v-model="value"
-      style="width: 100%"
-      :disabled="field.disabled"
-      :step="field.step"
-      :min="field.min"
-      :max="field.max"
-      :size="field.size"
-      :step-strictly="field.stepStrictly"
-      :precision="field.precision"
-      :controls-position="field.controlsPosition"
-    ></InputNumber>
+    <ElInputNumber v-model="value" style="width: 100%" :disabled="field.disabled" :step="field.step" :min="field.min"
+      :max="field.max" :size="field.size" :step-strictly="field.stepStrictly" :precision="field.precision"
+      :controls-position="field.controlsPosition"></ElInputNumber>
   </div>
 </template>
 
 <script>
 import baseMixin from "./baseMixin";
-import { InputNumber } from "element-plus";
+import { ElInputNumber } from "element-plus";
 export default {
   mixins: [baseMixin],
-  components: { InputNumber },
+  components: { ElInputNumber },
   methods: {
     defaultFieldAttr() {
       return {
@@ -31,7 +22,7 @@ export default {
         stepStrictly: false, // 严格步数,只能输入 step 的倍数
         precision: undefined, // 精度,设置计数器最小值
         controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
-        size: "medium",
+        size: "default",
       };
     },
   },

@@ -96,7 +96,7 @@ export default {
         friendValue() {
             // 做一些友好值处理
             let friendValue = null;
-            let value = toRaw(this.values)[this.field.name];
+            let value = this.values[this.field.name];
             try {
                 switch (this.schema.type) {
                     case "array": friendValue = Array.isArray(value) ? value : strToObj(value); break;

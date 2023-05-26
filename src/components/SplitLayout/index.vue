@@ -36,82 +36,51 @@
  -->
 <!-- 组件模板, -->
 <template>
-  <div
-    :id="id"
-    class="layout"
-    @click="onCloseFloatPanel"
-    @mousedown="onResizePanel"
-    @mousemove="onResizePanel"
-    @mouseup="onResizePanel"
-    :class="[direction, { fit: fit }]"
-  >
+  <div :id="id" class="layout" @click="onCloseFloatPanel" @mousedown="onResizePanel" @mousemove="onResizePanel"
+    @mouseup="onResizePanel" :class="[direction, { fit: fit }]">
     <!-- first panal -->
     <transition name="togglePanel">
-      <perfect-scrollbar
-        :class="[direction, 'first', 'panel', 'vsecond-bg']"
-        v-if="hasFirstPanel"
-        v-show="firstIsShow"
+      <perfect-scrollbar :class="[direction, 'first', 'panel', 'vsecond-bg']" v-if="hasFirstPanel" v-show="firstIsShow"
         :style="
           direction == 'hori'
             ? { width: firstPanelSize }
             : { height: firstPanelSize }
-        "
-      >
+        ">
         <slot name="first"></slot>
       </perfect-scrollbar>
     </transition>
     <!-- 隔离 -->
-    <div
-      :class="[
-        direction,
-        'first',
-        'splitbar',
-        ' vbg-2',
-        { expaned: firstIsShow },
-      ]"
-      @mousemove="onOpenFloatPanel('first', $event)"
-      v-if="hasFirstPanel"
-    >
-      <div
-        class="splitCtrl vbg-3"
-        v-if="firstPanelCloseable"
-        @click="firstSplitClick"
-      ></div>
+    <div :class="[
+      direction,
+      'first',
+      'splitbar',
+      ' vbg-2',
+      { expaned: firstIsShow },
+    ]" @mousemove="onOpenFloatPanel('first', $event)" v-if="hasFirstPanel">
+      <div class="splitCtrl vbg-3" v-if="firstPanelCloseable" @click="firstSplitClick"></div>
     </div>
     <!-- center panal -->
     <perfect-scrollbar class="center panel">
       <slot name="center"></slot>
     </perfect-scrollbar>
     <!-- 隔离 -->
-    <div
-      :class="[
-        direction,
-        'last',
-        'splitbar',
-        ' vbg-2',
-        { expaned: lastIsShow },
-      ]"
-      @mousemove="onOpenFloatPanel('last', $event)"
-      v-if="hasLastPanel"
-    >
-      <div
-        class="splitCtrl vbg-3"
-        v-if="lastPanelCloseable"
-        @click="lastSplitClick"
-      ></div>
+    <div :class="[
+      direction,
+      'last',
+      'splitbar',
+      ' vbg-2',
+      { expaned: lastIsShow },
+    ]" @mousemove="onOpenFloatPanel('last', $event)" v-if="hasLastPanel">
+      <div class="splitCtrl vbg-3" v-if="lastPanelCloseable" @click="lastSplitClick"></div>
     </div>
     <!-- last panal -->
     <transition name="togglePanel">
-      <perfect-scrollbar
-        :class="[direction, 'last', 'panel', 'vsecond-bg']"
-        v-if="hasLastPanel"
-        v-show="lastIsShow"
+      <perfect-scrollbar :class="[direction, 'last', 'panel', 'vsecond-bg']" v-if="hasLastPanel" v-show="lastIsShow"
         :style="
           direction == 'hori'
             ? { width: lastPanelSize }
             : { height: lastPanelSize }
-        "
-      >
+        ">
         <slot name="last"></slot>
       </perfect-scrollbar>
     </transition>
@@ -177,6 +146,7 @@ Vue.component("togglePanel", {
 var PanelMinSize = 20; //面板最小尺寸
 var SplitbarSize = 8;
 export default {
+  name: "splitLayout",
   data() {
     return {
       id: parseInt(Math.random(0, 10) * 10000),
@@ -188,8 +158,8 @@ export default {
     };
   },
   watch: {
-    lastIsShow: function (value) {},
-    firstIsShow: function (value) {},
+    lastIsShow: function (value) { },
+    firstIsShow: function (value) { },
   },
   methods: {
     //返回面板状态0=隐藏,1-弹出,2-部分打开,3-打开
@@ -316,7 +286,7 @@ export default {
       var layoutEle = this.$el;
       var direction = this.direction;
       switch (
-        event.type //判断事件类型
+      event.type //判断事件类型
       ) {
         case "mousedown":
           if (target.classList.contains("splitbar")) {
@@ -383,9 +353,9 @@ export default {
                 let lRect = layoutEle.getBoundingClientRect();
                 if (
                   lRect.right -
-                    lRect.left -
-                    size -
-                    this.dragSplitbar.clientWidth <
+                  lRect.left -
+                  size -
+                  this.dragSplitbar.clientWidth <
                   PanelMinSize
                 ) {
                   size =
@@ -406,9 +376,9 @@ export default {
                 let lRect = layoutEle.getBoundingClientRect();
                 if (
                   lRect.bottom -
-                    lRect.top -
-                    size -
-                    this.dragSplitbar.clientHeight <
+                  lRect.top -
+                  size -
+                  this.dragSplitbar.clientHeight <
                   PanelMinSize
                 ) {
                   size =
@@ -556,47 +526,60 @@ $lightColorL10: darken($lightBackColor, 28%);
 .vbg {
   background: $lightBackColor;
 }
+
 // 主背景色+度
 .vbg-1 {
   background: $lightColorL1;
 }
+
 .vbg-2 {
   background: $lightColorL2;
 }
+
 .vbg-3 {
   background: $lightColorL3;
 }
+
 .vbg-4 {
   background: $lightColorL4;
 }
+
 .vbg-5 {
   background: $lightColorL5;
 }
+
 .vbg-6 {
   background: $lightColorL6;
 }
+
 .vbg-7 {
   background: $lightColorL7;
 }
+
 .vbg-8 {
   background: $lightColorL8;
 }
+
 .vbg-9 {
   background: $lightColorL9;
 }
+
 .vbg-10 {
   background: $lightColorL10;
 }
+
 /* 滚动条的宽度 */
 ::-webkit-scrollbar {
   width: 6px;
   height: 10px;
 }
+
 /* 滚动条的滑块 */
 ::-webkit-scrollbar-thumb {
   background-color: #a1a3a9;
   border-radius: 3px;
 }
+
 .layout {
   overflow: auto;
   position: relative;
@@ -605,12 +588,15 @@ $lightColorL10: darken($lightBackColor, 28%);
   display: flex;
   align-items: stretch;
 }
+
 .layout .panel {
   position: relative;
 }
+
 .layout.hori {
   flex-direction: row;
 }
+
 .layout.vert {
   flex-direction: column;
 }
@@ -622,19 +608,23 @@ $lightColorL10: darken($lightBackColor, 28%);
   right: 0px;
   bottom: 0px;
 }
-.layout > div {
+
+.layout>div {
   /*position: relative;*/
 }
-.layout > div.center {
+
+.layout>div.center {
   top: 0px;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
-.layout > div.panel.float {
+
+.layout>div.panel.float {
   z-index: 9;
 }
-.layout > div.hori.first.float {
+
+.layout>div.hori.first.float {
   position: absolute;
   height: 100%;
   z-index: 1000;
@@ -642,7 +632,8 @@ $lightColorL10: darken($lightBackColor, 28%);
   border-right: 1px solid rgb(2, 1, 1);
   box-shadow: 2px 0px 8px #dedede;
 }
-.layout > div.hori.last.float {
+
+.layout>div.hori.last.float {
   position: absolute;
   height: 100%;
   z-index: 1000;
@@ -652,7 +643,7 @@ $lightColorL10: darken($lightBackColor, 28%);
   right: -8px;
 }
 
-.layout > div.vert.first.float {
+.layout>div.vert.first.float {
   position: absolute;
   width: 100%;
   z-index: 1000;
@@ -660,7 +651,8 @@ $lightColorL10: darken($lightBackColor, 28%);
   border-bottom: 1px solid #dedede;
   box-shadow: 0px 2px 8px #dedede;
 }
-.layout > div.vert.last.float {
+
+.layout>div.vert.last.float {
   position: absolute;
   width: 100%;
   z-index: 1000;
@@ -670,32 +662,34 @@ $lightColorL10: darken($lightBackColor, 28%);
 }
 
 /*分割条*/
-.layout > div.splitbar {
+.layout>div.splitbar {
   position: relative;
   flex-shrink: 0;
   box-sizing: border-box;
   border: 0px;
 }
-.layout > div.hori.splitbar {
+
+.layout>div.hori.splitbar {
   height: 100%;
   width: 8px;
   cursor: e-resize;
 }
 
-.layout > div.vert.splitbar {
+.layout>div.vert.splitbar {
   width: 100%;
   height: 8px;
   cursor: s-resize;
 }
 
-.layout > div.splitbar > .splitCtrl {
+.layout>div.splitbar>.splitCtrl {
   position: absolute;
   box-sizing: border-box;
   /* background: white; */
   cursor: pointer;
   font-size: 4px;
 }
-.layout > div.hori.splitbar > .splitCtrl {
+
+.layout>div.hori.splitbar>.splitCtrl {
   top: 45%;
   left: 0px;
   height: 10%;
@@ -704,16 +698,17 @@ $lightColorL10: darken($lightBackColor, 28%);
   align-items: center;
 }
 
-.layout > div.vert.splitbar > .splitCtrl {
+.layout>div.vert.splitbar>.splitCtrl {
   top: 0px;
   left: 45%;
   width: 10%;
   height: 100%;
 }
 
-.layout > div.splitbar > .splitCtrl:hover {
+.layout>div.splitbar>.splitCtrl:hover {
   color: white;
 }
+
 .layout div[slot] {
   position: absolute;
   top: 0px;
@@ -721,68 +716,77 @@ $lightColorL10: darken($lightBackColor, 28%);
   width: 100%;
   height: 100%;
 }
+
 /** 指示按钮 */
-.layout > div.hori.splitbar > .splitCtrl:after {
+.layout>div.hori.splitbar>.splitCtrl:after {
   content: " ";
 }
-.layout > div.hori.last.splitbar {
+
+.layout>div.hori.last.splitbar {
   &:not(.expaned) {
-    & > .splitCtrl:after {
+    &>.splitCtrl:after {
       @include triangle(10px, 5px, currentColor, left);
       margin-left: 2px;
       opacity: 0.8;
     }
   }
+
   &.expaned {
-    & > .splitCtrl:after {
+    &>.splitCtrl:after {
       @include triangle(10px, 5px, currentColor, right);
       margin-left: 2px;
       opacity: 0.8;
     }
   }
 }
-.layout > div.hori.first.splitbar {
+
+.layout>div.hori.first.splitbar {
   &:not(.expaned) {
-    & > .splitCtrl:after {
+    &>.splitCtrl:after {
       @include triangle(10px, 5px, currentColor, right);
       margin-left: 2px;
       opacity: 0.8;
     }
   }
+
   &.expaned {
-    & > .splitCtrl:after {
+    &>.splitCtrl:after {
       @include triangle(10px, 5px, currentColor, left);
       margin-left: 2px;
       opacity: 0.8;
     }
   }
 }
-.layout > div.vert.last.splitbar {
+
+.layout>div.vert.last.splitbar {
   &:not(.expaned) {
-    & > .splitCtrl:after {
+    &>.splitCtrl:after {
       @include triangle(10px, 5px, currentColor, up);
       margin-left: -2px;
       opacity: 0.8;
     }
   }
+
   &.expaned {
-    & > .splitCtrl:after {
+    &>.splitCtrl:after {
       @include triangle(10px, 5px, currentColor, down);
       margin-left: -2px;
       opacity: 0.8;
     }
   }
 }
-.layout > div.vert.first.splitbar {
+
+.layout>div.vert.first.splitbar {
   &:not(.expaned) {
-    & > .splitCtrl:after {
+    &>.splitCtrl:after {
       @include triangle(10px, 5px, currentColor, down);
       margin-left: -2px;
       opacity: 0.8;
     }
   }
+
   &.expaned {
-    & > .splitCtrl:after {
+    &>.splitCtrl:after {
       @include triangle(10px, 5px, currentColor, up);
       margin-left: -2px;
       opacity: 0.8;

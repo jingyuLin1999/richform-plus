@@ -39,7 +39,7 @@ export default defineComponent({
         autosize: false, // 当type等于textarea有效。根据内容自动设置高度，也可接受一个对象 { minRows: 2, maxRows: 4}
         prepend: "", // 当type等于text有效。
         append: "", // 当type等于text有效。
-        size: "large", // large、small 和 mini
+        size: "default", // 'large'| 'default'| 'small',
         maxLength: null,
         minLength: null,
         options: [], // {label: "",value: ""}

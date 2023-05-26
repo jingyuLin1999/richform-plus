@@ -6,9 +6,10 @@
     <ElTabs v-model="activeTabName" @tab-click="clickTab">
       <ElTabPane v-for="(tab, index) in tabsItem.tabs" :key="index" :label="tab.label" :name="tab.name">
         <div class="tab-container">
-          <layout :layout="tab.fields" :isDesign="isDesign" :form="form" :values="values" :colors="colors"
-            :schema="schema" :fieldErrors="fieldErrors" :isFriendValue="isFriendValue" :hideFields="hideFields"
-            :isDark="isDark"></layout>
+          <component :is="asyncComponent" :layout="tab.fields" :isDesign="isDesign" :form="form" :values="values"
+            :colors="colors" :schema="schema" :fieldErrors="fieldErrors" :isFriendValue="isFriendValue"
+            :hideFields="hideFields" :isDark="isDark">
+          </component>
         </div>
       </ElTabPane>
     </ElTabs>
@@ -34,7 +35,7 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, defineAsyncComponent } from "vue";
 import DesignMixin from "../utils/designMixin";
 import { ElTabs, ElTabPane } from "element-plus";
 export default defineComponent({
@@ -49,8 +50,10 @@ export default defineComponent({
       activeTabName: this.tabsItem.tabs[0] ? this.tabsItem.tabs[0].name : "",
     };
   },
-  beforeCreate: function () {
-    this.$options.components.Layout = () => import("../layout.vue");
+  computed: {
+    asyncComponent() {
+      return defineAsyncComponent(() => import("../layout.vue"))
+    },
   },
   methods: {
     clickTab(tab) {

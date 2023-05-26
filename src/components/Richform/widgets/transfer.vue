@@ -1,6 +1,6 @@
 <template>
   <div :id="widgetId">
-    <Transfer
+    <ElTransfer
       style="
         display: flex;
         justify-content: flex-start;
@@ -12,16 +12,16 @@
       :filterable="field.filterable"
       :titles="field.titles"
       :button-texts="field.buttonTexts"
-    ></Transfer>
+    ></ElTransfer>
   </div>
 </template>
 
 <script>
 import baseMixin from "./baseMixin";
-import { Transfer } from "element-plus";
+import { ElTransfer } from "element-plus";
 export default {
   name: "TransferWidget",
-  components: { Transfer },
+  components: { ElTransfer },
   mixins: [baseMixin],
   methods: {
     defaultFieldAttr() {

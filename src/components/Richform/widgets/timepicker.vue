@@ -1,45 +1,26 @@
 
 <template>
   <div class="timepicker-widget" :id="widgetId">
-    <TimePicker
-      class="el-time"
-      v-if="field.isPicker"
-      v-model="value"
-      :readonly="field.readOnly"
-      :placeholder="field.placeholder"
-      :disabled="field.disabled"
-      :clearable="field.clearable"
-      :size="field.size"
-      :editable="field.editable"
-      :value-format="field.valueFormat"
-      :is-range="field.isRange"
-      :arrow-control="field.arrowControl"
-      :range-separator="field.rangeSeparator"
-      :start-placeholder="field.startPlaceholder"
-      :end-placeholder="field.endPlaceholder"
-    ></TimePicker>
-    <TimeSelect
-      class="el-time"
-      v-else
-      v-model="value"
-      :picker-options="field.pickerOptions"
-      :readonly="field.readOnly"
-      :placeholder="field.placeholder"
-      :disabled="field.disabled"
-      :clearable="field.clearable"
-      :value-format="field.valueFormat"
-      :size="field.size"
-    ></TimeSelect>
+    <ElTimePicker class="el-time" v-if="field.isPicker" v-model="value" :readonly="field.readOnly"
+      :placeholder="field.placeholder" :disabled="field.disabled" :clearable="field.clearable" :size="field.size"
+      :editable="field.editable" :value-format="field.valueFormat" :is-range="field.isRange"
+      :arrow-control="field.arrowControl" :range-separator="field.rangeSeparator"
+      :start-placeholder="field.startPlaceholder" :end-placeholder="field.endPlaceholder"
+      :disabled-hours="field.disabledHours" :disabled-minutes="field.disabledMinutes"
+      :disabled-seconds="field.disabledSeconds"></ElTimePicker>
+    <ElTimeSelect class="el-time" v-else v-model="value" :picker-options="field.pickerOptions" :readonly="field.readOnly"
+      :placeholder="field.placeholder" :disabled="field.disabled" :clearable="field.clearable"
+      :value-format="field.valueFormat" :size="field.size"></ElTimeSelect>
   </div>
 </template>
 
 
 <script>
 import baseMixin from "./baseMixin";
-import { TimeSelect, TimePicker } from "element-plus";
+import { ElTimeSelect, ElTimePicker } from "element-plus";
 export default {
   mixins: [baseMixin],
-  components: { TimeSelect, TimePicker },
+  components: { ElTimeSelect, ElTimePicker },
   methods: {
     defaultFieldAttr() {
       return {
@@ -47,15 +28,18 @@ export default {
         readOnly: false, // 只看
         disabled: false, // 禁用
         clearable: true, // 是否显示清除按钮
-        size: "medium", // medium / small / mini
+        size: "default", // "default", "small", "large"
         editable: false, // 文本框可输入
         placeholder: "请选择", // 单个
         valueFormat: "HH:mm:ss",
         isRange: false, // isRange下面三个有效
-        arrowControl: true,
+        arrowControl: false,
         rangeSeparator: "至", // 选择范围时的分隔符
         startPlaceholder: "开始时间",
         endPlaceholder: "结束时间",
+        disabledHours: null,
+        disabledMinutes: null,
+        disabledSeconds: null,
         pickerOptions: {
           // timeselect 有效
           start: "08:30",
@@ -71,7 +55,8 @@ export default {
 <style lang="scss">
 .timepicker-widget {
   width: 100%;
-  > .el-time {
+
+  >.el-time {
     width: 100%;
   }
 }

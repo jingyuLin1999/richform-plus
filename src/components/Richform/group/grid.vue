@@ -17,9 +17,10 @@
           form.grid ? 'grid-column-padding' : '',
         ]" v-for="(columnItem, index) in gridItem.fields" :key="index" :style="{ flex: ratio[index] || 1 }"
           v-show="isShowColumn(columnItem)">
-          <layout :layout="columnItem" :isDesign="isDesign" :form="form" :values="values" :colors="colors"
-            :schema="schema" :fieldErrors="fieldErrors" :isFriendValue="isFriendValue" :hideFields="hideFields"
-            :isDark="isDark"></layout>
+          <component :is="asyncComponent" :layout="columnItem" :isDesign="isDesign" :form="form" :values="values"
+            :colors="colors" :schema="schema" :fieldErrors="fieldErrors" :isFriendValue="isFriendValue"
+            :hideFields="hideFields" :isDark="isDark">
+          </component>
         </div>
       </div>
     </div>
@@ -45,18 +46,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, defineAsyncComponent } from "vue";
 import DesignMixin from "../utils/designMixin";
+
 export default defineComponent({
   name: "grid-layout",
   mixins: [DesignMixin],
   props: {
     gridItem: { type: Object, default: () => ({}) },
   },
-  beforeCreate: function () {
-    this.$options.components.Layout = () => import("../layout.vue");
-  },
   computed: {
+    asyncComponent() {
+      return defineAsyncComponent(() => import("../layout.vue"))
+    },
     ratio() {
       return this.gridItem.ratio ? this.gridItem.ratio.split(":") : [];
     },

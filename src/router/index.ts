@@ -3,11 +3,15 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
     {
-        path: '/',
+        path: '/form-design',
         name: 'richform',
         component: () => import('@/examples/richform.vue')
     },
-
+    {
+        path: '/',
+        name: 'form-design',
+        component: () => import('@/examples/form-design.vue')
+    },
 ]
 
 const router = createRouter({

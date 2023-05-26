@@ -1,110 +1,69 @@
 <template>
   <dl class="draggable-list-widget" :id="widgetId">
-    <draggable v-bind="dragOptions()" :list="value">
-      <dd
-        class="draggable-list-item"
-        v-for="(item, index) in value"
-        :key="typeof item == 'string' ? index : item.id"
-      >
-        <i
-          :class="[
-            'el-icon-s-operation',
+    <!-- https://github.com/SortableJS/vue.draggable.next/issues/82#issuecomment-1109941745 -->
+    <draggable v-bind="dragOptions()" v-model="value"
+      :item-key="typeof field.template == 'string' ? ((item) => value.indexOf(item)) : field.idKey" tag="div">
+      <template #item="{ element, index }">
+        <dd class="draggable-list-item">
+          <ElIcon :class="[
             'draggable-list-icon',
             'list-handle-move',
-          ]"
-        ></i>
-        <!-- 字符串 -->
-        <template v-if="typeof item == 'string'">
-          <Input
-            v-if="field.strAttr.widget == 'input'"
-            class="input-draggable"
-            :size="field.size"
-            v-model="value[index]"
-            :placeholder="value[index]"
-          />
-          <Expression
-            v-else-if="field.strAttr.widget == 'expression'"
-            :form="form"
-            :values="values"
-            :field="{ name: field.name, index, ...field.strAttr }"
-          />
-        </template>
-        <!-- 对象 -->
-        <div
-          v-else
-          class="column-wrapper"
-          v-for="(key, index) in Object.keys(item)"
-          :key="index"
-        >
-          <Input
-            class="input-draggable"
-            v-if="
+          ]">
+            <Operation />
+          </ElIcon>
+          <!-- 字符串 -->
+          <template v-if="typeof element == 'string'">
+            <ElInput v-if="field.strAttr.widget == 'input'" class="input-draggable" :size="field.size"
+              v-model="value[index]" :placeholder="value[index]" />
+            <Expression v-else-if="field.strAttr.widget == 'expression'" :form="form" :values="values"
+              :field="{ name: field.name, index, ...field.strAttr }" />
+          </template>
+          <!-- 对象 -->
+          <div v-else class="column-wrapper" v-for="(key, index) in Object.keys(element)" :key="index">
+            <ElInput class="input-draggable" v-if="
               field.attribute[key] &&
               field.attribute[key].editable &&
               field.attribute[key].widget == 'input'
-            "
-            v-model="item[key]"
-            :size="field.size"
-            :disabled="field.attribute[key].disabled == true"
-            :placeholder="field.attribute[key].placeholder || key"
-          />
-          <ColorPicker
-            v-else-if="
+            " v-model="element[key]" :size="field.size" :disabled="field.attribute[key].disabled == true"
+              :placeholder="field.attribute[key].placeholder || key" />
+            <ElColorPicker v-else-if="
               field.attribute[key] &&
               field.attribute[key].editable &&
               field.attribute[key].widget == 'colorpicker'
-            "
-            :disabled="field.attribute[key].disabled == true"
-            v-model="item[key]"
-            :size="field.size"
-          >
-          </ColorPicker>
-          <Select
-            v-else-if="
+            " :disabled="field.attribute[key].disabled == true" v-model="element[key]" :size="field.size">
+            </ElColorPicker>
+            <ElSelect v-else-if="
               field.attribute[key] &&
               field.attribute[key].editable &&
               field.attribute[key].widget == 'select'
-            "
-            v-model="item[key]"
-            :size="field.size"
-            :disabled="field.attribute[key].disabled == true"
-            :placeholder="field.attribute[key].placeholder || key"
-          >
-            <Option
-              v-for="item in field.attribute[key].options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </Option>
-          </Select>
-        </div>
-        <i
-          v-if="field.showOperation"
-          :class="['el-icon-remove', 'delete-list-icon']"
-          @click="deleteItem(index)"
-        ></i>
-      </dd>
-
-      <div
-        v-show="field.showOperation"
-        class="draggable-list-add"
-        @click="addItem"
-      >
-        添加
-      </div>
+            " v-model="element[key]" :size="field.size" :disabled="field.attribute[key].disabled == true"
+              :placeholder="field.attribute[key].placeholder || key">
+              <ElOption v-for="element in field.attribute[key].options" :key="element.value" :label="element.label"
+                :value="element.value">
+              </ElOption>
+            </ElSelect>
+          </div>
+          <ElIcon v-if="field.showOperation" :class="['el-icon-remove', 'delete-list-icon']" @click="deleteItem(index)">
+            <Remove />
+          </ElIcon>
+        </dd>
+      </template>
     </draggable>
+    <div v-show="field.showOperation" class="draggable-list-add" @click="addItem">
+      添加
+    </div>
   </dl>
 </template>
 <script>
 import baseMixin from "./baseMixin";
 import Draggable from "vuedraggable";
-import Expression from "./expression";
-import { Input, ColorPicker, Select, Option } from "element-plus";
+import Expression from "./expression.vue";
+import { Operation, Minus } from '@element-plus/icons-vue'
+import { ElInput, ElColorPicker, ElSelect, ElOption, ElIcon } from "element-plus";
 export default {
   name: "DraggableListWidget",
   mixins: [baseMixin],
-  components: { Draggable, Input, ColorPicker, Select, Option, Expression },
+  components: { Draggable, ElInput, ElColorPicker, ElSelect, ElOption, Expression, ElIcon },
   data() {
     return {
       id: 1,
@@ -124,7 +83,7 @@ export default {
     defaultFieldAttr() {
       return {
         idKey: "id", // id的键值
-        size: "small", // "mini/medium"
+        size: "default", //   "default", "small", "large"
         title: "拖拽列表",
         atLeastOne: true, // 选项至少要有一个D
         icon: "el-icon-circle-plus", // 添加图标
@@ -149,7 +108,7 @@ export default {
         },
         strAttr: {
           // 当template为字符串时有效
-          size: "mini",
+          size: "default",
           widget: "input", // input|expression
           key: {
             title: "字段",
@@ -215,6 +174,7 @@ export default {
   justify-content: flex-start;
   margin: 0;
   padding: 0;
+
   .draggable-list-icon,
   .delete-list-icon {
     width: 30px;
@@ -223,30 +183,38 @@ export default {
     font-size: 25px;
     cursor: pointer;
   }
+
   .delete-list-icon {
     color: #fbc5c5;
   }
+
   .delete-list-icon:hover {
     color: #f56c6c;
   }
+
   .draggable-list-icon {
     color: #c8cbcc;
     cursor: move;
   }
+
   .draggable-list-item {
     display: flex;
     align-items: center;
     margin: 5px 0;
+
     .list-handel-move {
       color: #556567;
     }
+
     .input-draggable {
       min-width: 60px;
     }
+
     .column-wrapper {
       margin-right: 3px;
     }
   }
+
   .draggable-list-add {
     margin-top: 5px;
     font-size: 14px;

@@ -1,16 +1,17 @@
 <template>
-  <Cascader :id="widgetId" class="cascader-widget" v-model="value" :options="options" :disabled="field.disabled"
+  <ElCascader :id="widgetId" class="cascader-widget" v-model="value" :options="options" :disabled="field.disabled"
     :placeholder="field.placeholder" :separator="field.separator" :clearable="field.clearable"
     :filterable="field.filterable" :collapse-tags="field.collapseTags" :props="field.defaultProp"
-    :show-all-levels="field.showAllLevels"></Cascader>
+    :show-all-levels="field.showAllLevels">
+  </ElCascader>
 </template>
 
 <script>
-import { Cascader } from "element-ui";
+import { ElCascader } from "element-plus";
 import baseMixin from "./baseMixin";
 export default {
   mixins: [baseMixin],
-  components: { Cascader },
+  components: { ElCascader },
   data() {
     return {
       optionFlatMap: {}, // options扁平数据

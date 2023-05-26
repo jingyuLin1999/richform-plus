@@ -44,15 +44,15 @@
             :values="design.values" :authorization="authorization" @designItem="clickedField"></RichForm>
         </template>
         <template slot="last">
-          <Tabs class="tab-attribute" v-model="activeTabName">
-            <TabPane label="属性配置" name="attribute" class="design-tab">
+          <ElTabs class="tab-attribute" v-model="activeTabName">
+            <ElTabPane label="属性配置" name="attribute" class="design-tab">
               <RichForm deepValues :schema="attribute.schema" :form="attribute.form" :values="attribute.values"
                 :isDesign="false" @action="attributeAction"></RichForm>
-            </TabPane>
-            <TabPane label="校验规则" name="rules" class="design-tab">
+            </ElTabPane>
+            <ElTabPane label="校验规则" name="rules" class="design-tab">
               <RichForm :schema="rules.schema" :form="rules.form" :values="rules.values"></RichForm>
-            </TabPane>
-          </Tabs>
+            </ElTabPane>
+          </ElTabs>
         </template>
       </split-layout>
     </div>
@@ -60,17 +60,17 @@
 </template>
 
 <script>
-import RichForm from "../Richform";
+import RichForm from "../Richform/index.vue";
 import Draggable from "vuedraggable";
 import { mergeDeepRight } from "ramda";
-import SplitLayout from "../SplitLayout";
-import { layout, widgets } from "./meta/layout";
-import { Tabs, TabPane } from "element-plus";
+import SplitLayout from "../SplitLayout/index.vue";
+import { layout, widgets } from "./meta/layout.js";
+import { Tabs, ElTabPane } from "element-plus";
 
 
 export default {
   name: "FormDesign",
-  components: { Draggable, SplitLayout, RichForm, Tabs, TabPane },
+  components: { Draggable, SplitLayout, RichForm, ElTabs, ElTabPane },
   props: {
     fields: { type: Array, default: () => [] }, // 表的字段
     authorization: { type: Object, default: () => ({}) }, // 权限

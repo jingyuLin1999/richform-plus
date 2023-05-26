@@ -1,32 +1,22 @@
 <template>
   <div :id="widgetId" class="date-picker-widget">
-    <DatePicker
-      v-model="value"
-      :type="field.type"
-      :readonly="field.readOnly"
-      :placeholder="field.placeholder"
-      :disabled="field.disabled"
-      :clearable="field.clearable"
-      :size="field.size"
-      :editable="field.editable"
-      :format="field.format"
-      :value-format="field.valueFormat"
-      :arrow-control="field.arrowControl"
-      :range-separator="field.rangeSeparator"
-      :start-placeholder="field.startPlaceholder"
-      :end-placeholder="field.endPlaceholder"
-      :picker-options="field.pickerOptions"
-    ></DatePicker>
+    <ElDatePicker v-model="value" :type="field.type" :readonly="field.readOnly" :placeholder="field.placeholder"
+      :disabled="field.disabled" :clearable="field.clearable" :size="field.size" :editable="field.editable"
+      :format="field.format" :value-format="field.valueFormat" :arrow-control="field.arrowControl"
+      :range-separator="field.rangeSeparator" :start-placeholder="field.startPlaceholder"
+      :end-placeholder="field.endPlaceholder" :shortcuts="field.shortcuts" :disabled-date="field.disabledDate">
+    </ElDatePicker>
   </div>
 </template>
 
 <script>
+import 'dayjs/locale/zh-cn'
 import baseMixin from "./baseMixin";
-import { DatePicker } from "element-plus";
+import { ElDatePicker } from "element-plus";
 export default {
   name: "dataPickerWidget",
   mixins: [baseMixin],
-  components: { DatePicker },
+  components: { ElDatePicker },
   watch: {
     "colors.theme": {
       handler(theme) {
@@ -45,50 +35,45 @@ export default {
     defaultFieldAttr() {
       return {
         isNeedValidate: false, // 该widget不需要要验证，非属性
-        type: "date", // year/month/date/dates/ week/datetime/datetimerange/ daterange/monthrange
+        type: "datetime", // year/month/date/dates/ week/datetime/datetimerange/ daterange/monthrange
         readOnly: false,
         disabled: false,
         clearable: true, // 是否显示清除按钮
-        size: "medium", // medium / small / mini
+        size: "default", // 'large'| 'default'| 'small',
         editable: false, // 文本框可输入
         placeholder: "请选择", // 单个
-        format: "", // 显示的格式 yyyy 年 MM 月 dd 日
-        valueFormat: "timestamp", // yyyy-MM-dd/timestamp 指定值的格式
-        arrowControl: true,
+        format: "YYYY-MM-DD HH:mm:ss", // 显示的格式 YYYY-MM-DD
+        valueFormat: "YYYY-MM-DD HH:mm:ss", //yyyy-MM-dd HH:mm:ss/x代表timestamp 指定值的格式
+        arrowControl: false, // 选择时间，箭头控制
         rangeSeparator: "至", // 选择范围时的分隔符
         startPlaceholder: "开始时间",
         endPlaceholder: "结束时间",
         mapValues: [], // 如果是时间范围,则values会生成starttime->范围下标0，endtime两个字段->范围下标1   如：["starttime", "endtime"]
-        pickerOptions: {
-          // 限制范围
-          disabledDate(time) {
-            return time.getTime() > Date.now();
+        shortcuts: [// 带有快捷键
+          {
+            text: '今天',
+            value: new Date(),
           },
-          // 带有快捷键
-          shortcuts: [
-            {
-              text: "今天",
-              onClick(picker) {
-                picker.$emit("pick", new Date());
-              },
+          {
+            text: '昨天',
+            value: () => {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24)
+              return date
             },
-            {
-              text: "昨天",
-              onClick(picker) {
-                const date = new Date();
-                date.setTime(date.getTime() - 3600 * 1000 * 24);
-                picker.$emit("pick", date);
-              },
+          },
+          {
+            text: '一周前',
+            value: () => {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+              return date
             },
-            {
-              text: "一周前",
-              onClick(picker) {
-                const date = new Date();
-                date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                picker.$emit("pick", date);
-              },
-            },
-          ],
+          },
+        ],
+        // 限制范围
+        disabledDate(time) {
+          return time.getTime() > Date.now();
         },
       };
     },

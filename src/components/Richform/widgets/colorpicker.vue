@@ -1,22 +1,15 @@
 <template>
-  <ColorPicker
-    :id="widgetId"
-    class="widget-colorpicker"
-    v-model="value"
-    :disabled="field.disabled"
-    :show-alpha="field.showAlpha"
-    :color-format="field.colorFormat"
-    :size="field.size"
-    :predefine="field.predefineColors"
-  ></ColorPicker>
+  <ElColorPicker :id="widgetId" class="widget-colorpicker" v-model="value" :disabled="field.disabled"
+    :show-alpha="field.showAlpha" :color-format="field.colorFormat" :size="field.size" :predefine="field.predefineColors">
+  </ElColorPicker>
 </template>
 
 <script>
 import baseMixin from "./baseMixin";
-import { ColorPicker } from "element-plus";
+import { ElColorPicker } from "element-plus";
 export default {
   mixins: [baseMixin],
-  components: { ColorPicker },
+  components: { ElColorPicker },
   data() {
     return {
       checkAll: false,
@@ -28,7 +21,7 @@ export default {
       return {
         predefineColors: ["#409EFF", "#f00"], // 预定义颜色
         disabled: false,
-        size: "small", // 选项： medium / small / mini
+        size: "default", // 选项： 'large' | 'default' | 'small'
         showAlpha: false,
         popperClass: "",
         colorFormat: "", //单位选项：hsl / hsv / hex / rgb 说明：写入 v-model 的颜色的格式

@@ -14,7 +14,7 @@
 
 <script>
 import baseMixin from "./baseMixin";
-import ipInput from "./components/IpInput";
+import ipInput from "./components/IpInput/index.vue";
 
 export default {
   name: "IpInputWidget",
