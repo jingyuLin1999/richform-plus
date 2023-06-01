@@ -29,7 +29,7 @@ export const attribute = {
                 title: "触发方式",
                 widget: "select",
                 name: "expandTrigger",
-                size: "small",
+                size: "default",
                 options: [
                     {
                         value: "hover",
@@ -45,13 +45,13 @@ export const attribute = {
                 title: "标签键值",
                 widget: "input",
                 name: "propLabel",
-                size: "small"
+                size: "default"
             },
             {
                 title: "值键值",
                 widget: "input",
                 name: "propValue",
-                size: "small"
+                size: "default"
             },
             {
                 widget: "grid",
@@ -128,7 +128,7 @@ export const attribute = {
                 title: "分隔符",
                 widget: "input",
                 name: "separator",
-                size: "small",
+                size: "default",
                 hideRely: "showAllLevels==false",
             },
             {

@@ -1,4 +1,3 @@
-import { toRaw } from "vue";
 import { type, mergeDeepRight } from "ramda";
 import { isUrl, loadDict, strToObj } from "../utils";
 import CommonMixin from "../utils/commonMixin";
@@ -39,7 +38,7 @@ export default {
                 this.updateValue++; // 强制更新
                 let friendValue = {  // 必须改变地址，否则会出现无限循环
                     value: this.isDeepValues ?
-                        this.deepPick(this.field.name.split("."), toRaw(this.values)) :
+                        this.deepPick(this.field.name.split("."), this.values) :
                         this.friendValue()
                 };
                 return friendValue.value;
@@ -49,9 +48,6 @@ export default {
                 this.changeValue(emitValue)
             }
         },
-        dict() {
-            this.field
-        }
     },
     methods: {
         load() {

@@ -11,7 +11,7 @@
         autosize: false, // 当type等于textarea有效。根据内容自动设置高度，也可接受一个对象 { minRows: 2, maxRows: 4}
         prepend: "", // 当type等于text有效。
         append: "", // 当type等于text有效。
-        size: "", // large、small 和 mini
+        size: "", // large、default 和 small
         maxLength: null,
         minLength: null,
  *
@@ -22,7 +22,12 @@ export const attribute = {
 
     },
     values: {
-
+        placeholder: "",
+        type: "",
+        size: "",
+        disabled: false,
+        clearable: true,
+        showPassword: false,
     },
     form: {
         ...baseForm,
@@ -31,14 +36,14 @@ export const attribute = {
             {
                 title: "占位符",
                 name: "placeholder",
-                size: "small",
+                size: "default",
                 widget: "input"
             },
             {
                 title: "类型",
                 widget: "select",
                 name: "type",
-                size: "small",
+                size: "default",
                 options: [
                     {
                         value: "text",
@@ -54,18 +59,18 @@ export const attribute = {
                 title: "尺寸",
                 widget: "select",
                 name: "size",
-                size: "small",
+                size: "default",
                 options: [
                     {
-                        value: "medium",
+                        value: "large",
                         label: "大",
                     },
                     {
-                        value: "small ",
+                        value: "default",
                         label: "中",
                     },
                     {
-                        value: "mini",
+                        value: "small",
                         label: "小",
                     },
                 ],
@@ -74,7 +79,7 @@ export const attribute = {
                 title: "禁用",
                 widget: "select",
                 name: "disabled",
-                size: "small",
+                size: "default",
                 options: [
                     {
                         value: true,
@@ -127,6 +132,7 @@ export const rules = {
     schema: {},
     values: {
         type: "string",
+        maximum: 255,
     },
     form: {
         ...baseForm,
@@ -135,7 +141,7 @@ export const rules = {
                 title: "类型",
                 widget: "select",
                 name: "type",
-                size: "small",
+                size: "default",
                 options: [
                     {
                         value: "string",
@@ -157,7 +163,7 @@ export const rules = {
                 stepStrictly: false, // 严格步数,只能输入 step 的倍数
                 precision: undefined, // 精度,设置计数器最小值
                 controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
-                size: "mini",
+                size: "default",
                 hideRely: "type==string",
             },
             {
@@ -170,7 +176,7 @@ export const rules = {
                 stepStrictly: false, // 严格步数,只能输入 step 的倍数
                 precision: undefined, // 精度,设置计数器最小值
                 controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
-                size: "mini",
+                size: "default",
                 hideRely: "type==string",
             },
             {
@@ -184,7 +190,7 @@ export const rules = {
                 stepStrictly: false, // 严格步数,只能输入 step 的倍数
                 precision: undefined, // 精度,设置计数器最小值
                 controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
-                size: "mini",
+                size: "default",
                 hideRely: "type==number",
             },
             {
@@ -198,10 +204,9 @@ export const rules = {
                 stepStrictly: false, // 严格步数,只能输入 step 的倍数
                 precision: undefined, // 精度,设置计数器最小值
                 controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
-                size: "mini",
+                size: "default",
                 hideRely: "type==number",
             },
-
         ]
     }
 }

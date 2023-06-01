@@ -13,13 +13,13 @@ export const attribute = {
             // {
             //     title: "前置内容",
             //     name: "prepend",
-            //     size: "small",
+            //     size: "default",
             //     widget: "input"
             // },
             // {
             //     title: "后置内容",
             //     name: "append",
-            //     size: "small",
+            //     size: "default",
             //     widget: "input"
             // },
         ],

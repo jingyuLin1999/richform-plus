@@ -15,7 +15,7 @@ export const attribute = {
                 name: "ratio",
                 widget: "input",
                 description: "和列数对应,中间用英文字符:隔开",
-                size: "small",
+                size: "default",
                 placeholder: "如： 1:1"
             },
             {

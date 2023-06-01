@@ -12,18 +12,18 @@ export const attribute = {
                 title: "尺寸",
                 widget: "select",
                 name: "size",
-                size: "small",
+                size: "default",
                 options: [
                     {
-                        value: "medium",
+                        value: "large",
                         label: "大",
                     },
                     {
-                        value: "small ",
+                        value: "default",
                         label: "中",
                     },
                     {
-                        value: "mini",
+                        value: "small",
                         label: "小",
                     },
                 ],
@@ -32,7 +32,7 @@ export const attribute = {
                 title: "禁用",
                 widget: "select",
                 name: "disabled",
-                size: "small",
+                size: "default",
                 options: [
                     {
                         value: true,
@@ -48,7 +48,7 @@ export const attribute = {
                 title: "字体大小",
                 widget: "input",
                 name: "fontSize",
-                size: "small"
+                size: "default"
             },
         ],
     }

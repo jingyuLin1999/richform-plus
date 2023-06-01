@@ -41,7 +41,10 @@ export default {
   watch: {
     // 多选和单选切换，value数据类型需跟着转换
     "field.multiple"(newVal) {
-      this.value = newVal ? [] : "";
+      // console.log(this.value)
+      // if (newVal && !Array.isArray(this.value)) {
+      //   this.value = [];
+      // } 
     },
   },
   computed: {
@@ -68,7 +71,7 @@ export default {
       return {
         isGroup: false, // 是否分组
         placeholder: "请选择",
-        size: "",
+        size: "default",
         disabled: false, // 说明：当该属性在字典中，则禁用对应的选项。若在field.disable则禁用整个选择器
         clearable: false, // 说明：可清空选项  注意：仅单选有效
         multiple: false, // 说明：是否支持多选

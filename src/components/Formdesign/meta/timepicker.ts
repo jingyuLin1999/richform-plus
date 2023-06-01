@@ -4,7 +4,7 @@
         readOnly: false,
         disabled: false,
         clearable: true, // 是否显示清除按钮
-        size: "", // medium / small / mini
+        size: "", // large / default / small
         editable: false, // 文本框可输入
         placeholder: "请选择", // 单个
         valueFormat: "HH:mm:ss",
@@ -44,7 +44,7 @@ export const attribute = {
                 title: "范围选择",
                 widget: "select",
                 name: "isRange",
-                size: "small",
+                size: "default",
                 options: [
                     {
                         value: true,
@@ -60,18 +60,18 @@ export const attribute = {
                 title: "尺寸",
                 widget: "select",
                 name: "size",
-                size: "small",
+                size: "default",
                 options: [
                     {
-                        value: "medium",
+                        value: "large",
                         label: "大",
                     },
                     {
-                        value: "small",
+                        value: "default",
                         label: "中",
                     },
                     {
-                        value: "mini",
+                        value: "small",
                         label: "小",
                     },
                 ],
@@ -81,21 +81,21 @@ export const attribute = {
                 title: "开始占位符",
                 name: "startPlaceholder",
                 hideRely: "isRange==false",
-                size: "small"
+                size: "default"
             },
             {
                 widget: "input",
                 title: "结束占位符",
                 name: "endPlaceholder",
                 hideRely: "isRange==false",
-                size: "small"
+                size: "default"
             },
             {
                 widget: "input",
                 title: "分隔符",
                 name: "rangeSeparator",
                 hideRely: "isRange==false",
-                size: "small"
+                size: "default"
             },
             {
                 widget: "grid",
@@ -164,7 +164,7 @@ export const rules = {
             //     title: "类型",
             //     widget: "select",
             //     name: "type",
-            //     size: "small",
+            //     size: "default",
             //     options: [
             //         {
             //             value: "string",

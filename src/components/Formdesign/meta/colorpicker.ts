@@ -2,7 +2,7 @@
  *
         predefineColors: ["#409EFF", "#f00"], // 预定义颜色
         disabled: false,
-        size: "small", // 选项： medium / small / mini
+        size: "default", // 选项： large / default / small
         showAlpha: false,
         popperClass: "",
         colorFormat: "", //单位选项：hsl / hsv / hex / rgb 说明：写入 v-model 的颜色的格式
@@ -26,7 +26,7 @@ export const attribute = {
                 widget: "select",
                 name: "selectMultiple",
                 filterable: true,
-                size: "small",
+                size: "default",
                 options: [
                     {
                         value: "hsl",

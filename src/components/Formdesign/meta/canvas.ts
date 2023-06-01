@@ -11,7 +11,7 @@
         autosize: false, // 当type等于textarea有效。根据内容自动设置高度，也可接受一个对象 { minRows: 2, maxRows: 4}
         prepend: "", // 当type等于text有效。
         append: "", // 当type等于text有效。
-        size: "", // large、small 和 mini
+        size: "", // large、default 和 small
         maxLength: null,
         minLength: null,
  *
@@ -31,7 +31,7 @@ export const attribute = {
                 title: "表边框",
                 widget: "select",
                 name: "border",
-                size: "small",
+                size: "default",
                 options: [
                     {
                         value: true,
@@ -47,7 +47,7 @@ export const attribute = {
                 title: "表栅栏",
                 widget: "select",
                 name: "grid",
-                size: "small",
+                size: "default",
                 options: [
                     {
                         value: true,
@@ -63,7 +63,7 @@ export const attribute = {
                 title: "对齐方式",
                 widget: "select",
                 name: "labelAlign",
-                size: "small",
+                size: "default",
                 options: [
                     {
                         value: "right",
@@ -79,19 +79,19 @@ export const attribute = {
                 title: "标签后缀",
                 widget: "input",
                 name: "labelSuffix",
-                size: "small",
+                size: "default",
             },
             {
                 title: "标签宽度",
                 widget: "input",
                 name: "labelWidth",
-                size: "small",
+                size: "default",
             },
             {
                 title: "行显示",
                 widget: "select",
                 name: "labelInline",
-                size: "small",
+                size: "default",
                 options: [
                     { value: true, label: "是" },
                     { value: false, label: "否" }
@@ -148,7 +148,7 @@ export const attribute = {
             //     title: "恢复主题",
             //     widget: "button",
             //     name: "resetTheme",
-            //     size: "small",
+            //     size: "default",
             //     type: "primary"
             // },
         ],

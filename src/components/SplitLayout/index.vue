@@ -87,66 +87,19 @@
   </div>
 </template>
 
-<script>
-import Vue from "vue";
+<script lang="ts">
+import { App, defineComponent } from "vue";
 import $ from "jquery";
-import PerfectScrollbar from "vue3-perfect-scrollbar"; //提供友好的滚动条
+import { PerfectScrollbar } from "vue3-perfect-scrollbar"; //提供友好的滚动条
 import "vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css";
-Vue.use(PerfectScrollbar);
 
-//面板开关动画
-Vue.component("togglePanel", {
-  css: false,
-  enter: function (el, done) {
-    let $Panel = $(el);
-    let size = $Panel.attr("size");
-    let isFloat = $Panel.hasClass("float");
-    let hori = $Panel.hasClass("hori");
-    let aniAttrs = hori ? { width: size + "px" } : { height: size + "px" };
-    if ($Panel.hasClass("first")) {
-      if ($Panel.hasClass("hori")) {
-        aniAttrs.left = isFloat ? SplitbarSize : 0;
-      } else {
-        aniAttrs.top = isFloat ? SplitbarSize : 0;
-      }
-    } else {
-      if ($Panel.hasClass("hori")) {
-        aniAttrs.right = isFloat ? SplitbarSize : 0;
-      } else {
-        aniAttrs.bottom = isFloat ? SplitbarSize : 0;
-      }
-    }
-    $Panel.animate(aniAttrs, "fast", "swing", done);
-  },
-  enterCancelled: function (el) {
-    let $Panel = $(el);
-    let size = $Panel.attr("size");
-    let aniAttrs = $Panel.hasClass("hori")
-      ? { width: size + "px" }
-      : { height: size + "px" };
-    $Panel.stop();
-    $Panel.css(aniAttrs);
-  },
-  leave: function (el, done) {
-    let $Panel = $(el);
-    let hori = $Panel.hasClass("hori");
-    let aniAttrs = hori ? { width: 0 } : { height: 0 };
-    let size = hori ? $Panel.width() : $Panel.height();
-    $Panel.attr("size", size).animate(aniAttrs, "fast", "swing", done);
-  },
-  leaveCancelled: function (el) {
-    let $Panel = $(el);
-    let hori = $Panel.hasClass("hori");
-    let aniAttrs = hori ? { width: 0 } : { height: 0 };
-    $Panel.stop();
-    $Panel.css(aniAttrs);
-  },
-});
+// 面板开关动画
 
 var PanelMinSize = 20; //面板最小尺寸
 var SplitbarSize = 8;
-export default {
+export default defineComponent({
   name: "splitLayout",
+  components: { PerfectScrollbar },
   data() {
     return {
       id: parseInt(Math.random(0, 10) * 10000),
@@ -156,6 +109,55 @@ export default {
       firstIsShow: true,
       lastIsShow: true,
     };
+  },
+  install: function (app: App) {
+    app.component("togglePanel", {
+      css: false,
+      enter: function (el, done) {
+        let $Panel = $(el);
+        let size = $Panel.attr("size");
+        let isFloat = $Panel.hasClass("float");
+        let hori = $Panel.hasClass("hori");
+        let aniAttrs = hori ? { width: size + "px" } : { height: size + "px" };
+        if ($Panel.hasClass("first")) {
+          if ($Panel.hasClass("hori")) {
+            aniAttrs.left = isFloat ? SplitbarSize : 0;
+          } else {
+            aniAttrs.top = isFloat ? SplitbarSize : 0;
+          }
+        } else {
+          if ($Panel.hasClass("hori")) {
+            aniAttrs.right = isFloat ? SplitbarSize : 0;
+          } else {
+            aniAttrs.bottom = isFloat ? SplitbarSize : 0;
+          }
+        }
+        $Panel.animate(aniAttrs, "fast", "swing", done);
+      },
+      enterCancelled: function (el) {
+        let $Panel = $(el);
+        let size = $Panel.attr("size");
+        let aniAttrs = $Panel.hasClass("hori")
+          ? { width: size + "px" }
+          : { height: size + "px" };
+        $Panel.stop();
+        $Panel.css(aniAttrs);
+      },
+      leave: function (el, done) {
+        let $Panel = $(el);
+        let hori = $Panel.hasClass("hori");
+        let aniAttrs = hori ? { width: 0 } : { height: 0 };
+        let size = hori ? $Panel.width() : $Panel.height();
+        $Panel.attr("size", size).animate(aniAttrs, "fast", "swing", done);
+      },
+      leaveCancelled: function (el) {
+        let $Panel = $(el);
+        let hori = $Panel.hasClass("hori");
+        let aniAttrs = hori ? { width: 0 } : { height: 0 };
+        $Panel.stop();
+        $Panel.css(aniAttrs);
+      },
+    })
   },
   watch: {
     lastIsShow: function (value) { },
@@ -459,17 +461,17 @@ export default {
     },
     listenScreenResize() {
       // show和hide有动画效果所以要延迟几毫秒
-      const TIEM_DELAY = 100;
-      this.$on("onshow", () =>
-        setTimeout(() => this.$emit("onresize"), TIEM_DELAY)
-      );
-      this.$on("onhide", () =>
-        setTimeout(() => this.$emit("onresize"), TIEM_DELAY)
-      );
-      this.$on("dragSplitbar", () => {
-        // this.$eventbus.emit("dragSplitbar");  // TODO EventBus
-        this.$emit("onresize");
-      });
+      // const TIEM_DELAY = 100;
+      // this.$on("onshow", () =>
+      //   setTimeout(() => this.$emit("onresize"), TIEM_DELAY)
+      // );
+      // this.$on("onhide", () =>
+      //   setTimeout(() => this.$emit("onresize"), TIEM_DELAY)
+      // );
+      // this.$on("dragSplitbar", () => {
+      //   // this.$eventbus.emit("dragSplitbar");  // TODO EventBus
+      //   this.$emit("onresize");
+      // });
     },
   },
   created() {
@@ -504,7 +506,7 @@ export default {
     firstPanelCanResize: { type: Boolean, default: true },
     lastPanelCanResize: { type: Boolean, default: true },
   },
-};
+});
 </script>
 <!-- 组件样式 -->
 <style lang="scss" scoped>

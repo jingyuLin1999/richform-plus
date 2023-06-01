@@ -31,7 +31,9 @@
         <ElTooltip v-if="fieldSchema.description || field.description"
           :content="fieldSchema.description || field.description" class="field-question" placement="bottom"
           :effect="isDark ? 'dark' : 'light'">
-          <i class="el-icon-question"></i>
+          <el-icon class="field-question">
+            <QuestionFilled />
+          </el-icon>
         </ElTooltip>
       </div>
       <div v-if="form.grid && form.labelInline" v-show="isShyTitle" class="label-right-border"
@@ -121,22 +123,20 @@ export default defineComponent({
   },
   computed: {
     asyncComponent() {
-      let rawFieldSchema = toRaw(this.fieldSchema);
-      let widget = this.field.widget || rawFieldSchema.widget;
+      let widget = this.field.widget || this.fieldSchema.widget;
       if (!widget) return;
-      return defineAsyncComponent(() =>
-        import(`./widgets/${widget}.vue`)
-      )
+      return defineAsyncComponent({
+        loader: () => import(`./widgets/${widget}.vue`),
+        delay: 5,
+      })
     },
     fieldTitle() {
       this.pickSchema();
-      let rawFieldSchema = toRaw(this.fieldSchema);
-      return this.field.title || rawFieldSchema.title;
+      return this.field.title || this.fieldSchema.title;
     },
     isShyTitle() {
       // 隐藏标签
-      let rawField = toRaw(this.field);
-      return !(rawField.showTitle != undefined && !rawField.showTitle);
+      return !(this.field.showTitle != undefined && !this.field.showTitle);
     },
   },
   methods: {
@@ -323,10 +323,9 @@ export default defineComponent({
     },
     onChange(fieldName, value, schema) {
       if (value == undefined) return;
-      let rawSchema = toRaw(schema);
       this.emit("field:change", { fieldName, value });
       this.removeErrorAndRequire();
-      this.validateField(fieldName, rawSchema, value);
+      this.validateField(fieldName, schema, value);
       this.onDispatch(fieldName);
     },
     onButtonEvent(info) {

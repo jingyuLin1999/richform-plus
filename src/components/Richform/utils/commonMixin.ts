@@ -1,5 +1,5 @@
-import { type, path, isEmpty } from "ramda"
-import { isUrl, loadDict, deleteIteration } from "./";
+import { type, path, isEmpty, clone } from "ramda"
+import { isUrl, loadDict, deleteIteration } from ".";
 export default {
     methods: {
         friendDefaultValue(type) {
@@ -68,7 +68,9 @@ export default {
                                 const rqParams = Object.assign({ ...params }, pickValueMap, { [fieldName]: fieldValue });
                                 const response = await loadDict(dictItem.dictValue, rqParams, method);
                                 const payload = this.deepPick(respProp.split("."), response);
-                                if (Array.isArray(payload) && payload.length > 0) options = payload;
+                                if (Array.isArray(payload)) options = payload;
+                            } else {
+                                options = clone(dictItem.options)
                             }
                         } catch (e) {
                             console.error(e);
@@ -170,6 +172,7 @@ export default {
                             // 清空被隐藏字段的值
                             let friendType = field.forceType || (type(this.values[name]).toLowerCase());
                             this.deepSetValue(name.split("."), this.values, this.friendDefaultValue(friendType));
+                            // delete this.values[name.split(".")[0]];
                         }
                         // 隐藏状态删除表达式的验证规则
                         this.updateSchemaInHide(item);

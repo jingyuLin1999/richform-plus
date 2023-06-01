@@ -13,13 +13,15 @@ export const baseForm = {
 
 export const baseValues = {
     title: "",
+    hideRely: [],
+    type: "",
 }
 
 export const baseLayout = [
     {
         title: "名称",
         name: "name",
-        size: "small",
+        size: "default",
         widget: "select",
         filterable: true,
         allowCreate: true,
@@ -29,13 +31,13 @@ export const baseLayout = [
     {
         title: "标题",
         name: "title",
-        size: "small",
+        size: "default",
         widget: "input"
     },
     {
         title: "隐藏",
         name: "hideRely",
-        size: "small",
+        size: "default",
         widget: "draggablelist",
         // description: "隐藏依赖设置",
         template: "",
@@ -65,7 +67,7 @@ export const baseRules = {
             title: "类型",
             widget: "select",
             name: "type",
-            size: "small",
+            size: "default",
             options: [
                 { value: "string", label: "字符串" },
             ],

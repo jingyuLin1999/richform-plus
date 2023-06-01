@@ -27,25 +27,25 @@ export const attribute = {
             {
                 title: "开值",
                 widget: "input",
-                size: "small",
+                size: "default",
                 name: "activeValue"
             },
             {
                 title: "关值",
                 widget: "input",
-                size: "small",
+                size: "default",
                 name: "inactiveValue",
             },
             {
                 title: "激活文本",
                 widget: "input",
-                size: "small",
+                size: "default",
                 name: "activeText",
             },
             {
                 title: "取消文本",
                 widget: "input",
-                size: "small",
+                size: "default",
                 name: "inactiveText",
             },
             {
@@ -56,7 +56,7 @@ export const attribute = {
             {
                 title: "宽度",
                 widget: "inputnumber",
-                size: "small",
+                size: "default",
                 name: "width",
             },
         ],
@@ -75,7 +75,7 @@ export const rules = {
                 title: "类型",
                 widget: "select",
                 name: "type",
-                size: "small",
+                size: "default",
                 default: "number",
                 options: [
                     {

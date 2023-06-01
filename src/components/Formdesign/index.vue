@@ -17,40 +17,50 @@
       </div>
     </div>
     <div class="design-content">
-      <split-layout first-panel-size="210px" last-panel-size="280px" :hasLastPanel="true" :lastPanelCanResize="false">
-        <template slot="first">
+      <split-layout first-panel-size="210px" last-panel-size="280px" :hasLastPanel="true" :lastPanelCanResize="false"
+        direction="hori">
+        <template #first>
           <!-- 基本组件 -->
           <div class="base-widgets">
             <div class="widget-title">基础字段</div>
-            <draggable tag="div" v-bind="dragOptions()" v-model="widgetsMeta" :clone="cloneDragField"
+            <draggable tag="div" v-bind="dragOptions()" v-model="widgetsMeta" :clone="cloneDragField" item-key="id"
               class="base-components">
-              <span v-for="(widgetItem, index) in widgetsMeta" :key="index" class="base-component-item">{{
-                widgetItem.title }}</span>
+              <template #item="{ element, index }">
+                <span class="base-component-item">{{
+                  element.title }}
+                </span>
+              </template>
             </draggable>
           </div>
           <!-- 布局组件 -->
           <div class="base-widgets">
             <div class="widget-title">布局组件</div>
-            <draggable tag="div" v-bind="dragOptions()" v-model="layoutMeta" :clone="cloneDragField"
+            <draggable tag="div" v-bind="dragOptions()" v-model="layoutMeta" :clone="cloneDragField" item-key="id"
               class="base-components">
-              <span v-for="(layoutItem, index) in layoutMeta" :key="index" class="base-component-item">{{ layoutItem.title
-              }}</span>
+              <template #item="{ element, index }">
+                <span class="base-component-item">
+                  {{ element.title }}
+                </span>
+              </template>
             </draggable>
           </div>
         </template>
-        <template slot="center">
+        <template #center>
           <!-- {{design.values}} -->
+          <!-- {{ attribute.values }} -->
+          <!-- {{ this.design.schema.properties }} -->
           <RichForm class="design-canvas" :isDesign="isDesign" :schema="design.schema" :form="design.form"
             :values="design.values" :authorization="authorization" @designItem="clickedField"></RichForm>
         </template>
-        <template slot="last">
+        <template #last>
           <ElTabs class="tab-attribute" v-model="activeTabName">
             <ElTabPane label="属性配置" name="attribute" class="design-tab">
               <RichForm deepValues :schema="attribute.schema" :form="attribute.form" :values="attribute.values"
-                :isDesign="false" @action="attributeAction"></RichForm>
+                :isDesign="false" @action="attributeAction" :isFriendValue="true"></RichForm>
             </ElTabPane>
             <ElTabPane label="校验规则" name="rules" class="design-tab">
-              <RichForm :schema="rules.schema" :form="rules.form" :values="rules.values"></RichForm>
+              <RichForm :schema="rules.schema" :form="rules.form" :values="rules.values" :isFriendValue="true">
+              </RichForm>
             </ElTabPane>
           </ElTabs>
         </template>
@@ -62,10 +72,10 @@
 <script>
 import RichForm from "../Richform/index.vue";
 import Draggable from "vuedraggable";
-import { mergeDeepRight } from "ramda";
+import { mergeDeepRight, clone } from "ramda";
 import SplitLayout from "../SplitLayout/index.vue";
-import { layout, widgets } from "./meta/layout.js";
-import { Tabs, ElTabPane } from "element-plus";
+import { layout, widgets } from "./meta/layout";
+import { ElTabs, ElTabPane } from "element-plus";
 
 
 export default {
@@ -161,11 +171,11 @@ export default {
         sort: false, // 禁止排序
       };
     },
-    clickedField(item) {
+    async clickedField(item) {
       try {
         this.designItem = item;
         // 不能使用import，否则build后的包会出错
-        let { attribute, rules } = require(`./meta/${item.widget}`);
+        let { attribute, rules } = await import(`./meta/${item.widget}.ts`);
         this.setAttribute(item, attribute);
         this.setRules(item, rules);
       } catch (e) {
@@ -174,7 +184,7 @@ export default {
       }
     },
     setAttribute(item, attribute) {
-      let attributeMeta = JSON.parse(JSON.stringify(attribute));
+      let attributeMeta = clone(attribute);
       mergeDeepRight(attributeMeta.values, item);
       // 数据库字段
       let name = attributeMeta.form.layout.find((item) => item.name == "name");
@@ -191,41 +201,42 @@ export default {
     },
     setRules(item, rules) {
       // TODO schema由数据库字段生成
-      let rulesMeta = JSON.parse(JSON.stringify(rules));
-      let designRules = this.design.schema.properties;
+      let rulesMeta = clone(rules);
+      let curRules = this.design.schema.properties;
       let ruleValue = rulesMeta.values;
-      if (designRules[item.name])
-        Object.assign(ruleValue, designRules[item.name]);
-      this.$set(this.rules, "values", ruleValue);
-      this.$set(this.design.schema.properties, item.name, this.rules.values);
-      this.$set(this.rules, "form", rulesMeta.form);
+      if (curRules[item.name]) {
+        mergeDeepRight(ruleValue, curRules[item.name]);
+      }
+      this.design.schema.properties[item.name] = ruleValue;
+      this.rules.values = this.design.schema.properties[item.name];
+      this.rules.form = rulesMeta.form
     },
     // 布局克隆前预设处理
     cloneDragField(dragItem) {
       let newdragItem = JSON.parse(JSON.stringify(dragItem));
-      newdragItem.designId = Math.random().toString(16).slice(2, 14);
+      newdragItem.designId = 'r' + Math.random().toString(16).slice(2, 14);
       newdragItem.name = newdragItem.name + newdragItem.designId;
       return newdragItem;
     },
     onPreview() {
-      this.$set(this.designItem, "activeField", false);
-      this.$set(this.$data, "isDesign", !this.isDesign);
+      this.designItem.activeField = false;
+      this.$data.isDesign = !this.isDesign
     },
     onSubmit() { },
   },
 };
 // 加载表单元数据，供外部调用
-function loadMetas() {
-  const metaFiles = require.context("./meta", true, /\.js$/);
-  const modules = metaFiles.keys().reduce((modules, modulePath) => {
-    const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, "$1");
-    const value = metaFiles(modulePath);
-    modules[moduleName] = value;
-    return modules;
-  }, {});
-  return modules;
-}
-export const FormMetas = loadMetas();
+// function loadMetas() {
+//   const metaFiles = require.context("./meta", true, /\.js$/);
+//   const modules = metaFiles.keys().reduce((modules, modulePath) => {
+//     const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, "$1");
+//     const value = metaFiles(modulePath);
+//     modules[moduleName] = value;
+//     return modules;
+//   }, {});
+//   return modules;
+// }
+// export const FormMetas = loadMetas();
 </script>
 
 <style lang="scss">

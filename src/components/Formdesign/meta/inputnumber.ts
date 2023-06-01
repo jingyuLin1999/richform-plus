@@ -26,18 +26,18 @@ export const attribute = {
                 title: "尺寸",
                 widget: "select",
                 name: "size",
-                size: "small",
+                size: "default",
                 options: [
                     {
-                        value: "medium",
+                        value: "large",
                         label: "大",
                     },
                     {
-                        value: "small ",
+                        value: "default",
                         label: "中",
                     },
                     {
-                        value: "mini",
+                        value: "small",
                         label: "小",
                     },
                 ],
@@ -46,7 +46,7 @@ export const attribute = {
                 title: "按钮位置",
                 widget: "select",
                 name: "controlsPosition",
-                size: "small",
+                size: "default",
                 options: [
                     {
                         value: "",
@@ -62,7 +62,7 @@ export const attribute = {
                 title: "禁用",
                 widget: "select",
                 name: "disabled",
-                size: "small",
+                size: "default",
                 options: [
                     {
                         value: true,
@@ -80,7 +80,7 @@ export const attribute = {
                 widget: "inputnumber",
                 step: 1,
                 controlsPosition: "",
-                size: "small",
+                size: "default",
             },
             {
                 name: "min",
@@ -88,7 +88,7 @@ export const attribute = {
                 widget: "inputnumber",
                 step: 1,
                 controlsPosition: "",
-                size: "small",
+                size: "default",
             },
             {
                 name: "max",
@@ -96,7 +96,7 @@ export const attribute = {
                 widget: "inputnumber",
                 step: 1,
                 controlsPosition: "",
-                size: "small",
+                size: "default",
             },
             // {
             //     name: "stepStrictly",
@@ -124,7 +124,7 @@ export const rules = {
                 stepStrictly: false, // 严格步数,只能输入 step 的倍数
                 precision: undefined, // 精度,设置计数器最小值
                 controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
-                size: "mini",
+                size: "small",
             },
             {
                 title: "最大值",
@@ -136,7 +136,7 @@ export const rules = {
                 stepStrictly: false, // 严格步数,只能输入 step 的倍数
                 precision: undefined, // 精度,设置计数器最小值
                 controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
-                size: "mini",
+                size: "small",
             },
         ]
     }

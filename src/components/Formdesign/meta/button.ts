@@ -14,7 +14,7 @@ export const attribute = {
                 title: "类型",
                 widget: "select",
                 name: "type",
-                size: "small",
+                size: "default",
                 options: [
                     {
                         value: "default",
@@ -51,18 +51,18 @@ export const attribute = {
                 title: "尺寸",
                 widget: "select",
                 name: "size",
-                size: "small",
+                size: "default",
                 options: [
                     {
-                        value: "medium",
+                        value: "large",
                         label: "大",
                     },
                     {
-                        value: "small ",
+                        value: "default",
                         label: "中",
                     },
                     {
-                        value: "mini",
+                        value: "small",
                         label: "小",
                     },
                 ],
@@ -71,7 +71,7 @@ export const attribute = {
                 title: "禁用",
                 widget: "select",
                 name: "disabled",
-                size: "small",
+                size: "default",
                 options: [
                     {
                         value: true,
@@ -87,13 +87,13 @@ export const attribute = {
                 title: "左图标",
                 widget: "icon",
                 name: "leftIcon",
-                size: "small"
+                size: "default"
             },
             {
                 title: "右图标",
                 widget: "icon",
                 name: "rightIcon",
-                size: "small"
+                size: "default"
             },
             {
                 widget: "grid",
@@ -152,7 +152,7 @@ export const rules = {
                 title: "类型",
                 widget: "select",
                 name: "type",
-                size: "small",
+                size: "default",
                 options: [
                     {
                         value: "string",
@@ -174,7 +174,7 @@ export const rules = {
                 stepStrictly: false, // 严格步数,只能输入 step 的倍数
                 precision: undefined, // 精度,设置计数器最小值
                 controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
-                size: "mini",
+                size: "small",
                 hideRely: "type==string",
             },
             {
@@ -187,7 +187,7 @@ export const rules = {
                 stepStrictly: false, // 严格步数,只能输入 step 的倍数
                 precision: undefined, // 精度,设置计数器最小值
                 controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
-                size: "mini",
+                size: "small",
                 hideRely: "type==string",
             },
             {
@@ -201,7 +201,7 @@ export const rules = {
                 stepStrictly: false, // 严格步数,只能输入 step 的倍数
                 precision: undefined, // 精度,设置计数器最小值
                 controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
-                size: "mini",
+                size: "small",
                 hideRely: "type==number",
             },
             {
@@ -215,7 +215,7 @@ export const rules = {
                 stepStrictly: false, // 严格步数,只能输入 step 的倍数
                 precision: undefined, // 精度,设置计数器最小值
                 controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
-                size: "mini",
+                size: "small",
                 hideRely: "type==number",
             },
 

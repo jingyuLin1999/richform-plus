@@ -25,25 +25,25 @@ export const attribute = {
             {
                 title: "占位符",
                 name: "placeholder",
-                size: "small",
+                size: "default",
                 widget: "input"
             },
             {
                 title: "尺寸",
                 widget: "select",
                 name: "size",
-                size: "small",
+                size: "default",
                 options: [
                     {
-                        value: "medium",
+                        value: "large",
                         label: "大",
                     },
                     {
-                        value: "small ",
+                        value: "default",
                         label: "中",
                     },
                     {
-                        value: "mini",
+                        value: "small",
                         label: "小",
                     },
                 ],
@@ -123,7 +123,8 @@ export const attribute = {
 export const rules = {
     schema: {},
     values: {
-        type: "string"
+        type: "string",
+        minLength: 1
     },
     form: {
         ...baseForm,
@@ -132,7 +133,8 @@ export const rules = {
                 title: "类型",
                 widget: "select",
                 name: "type",
-                size: "small",
+                size: "default",
+                description: "数组，属性配置请开启多选功能",
                 options: [
                     {
                         value: "string",
@@ -154,7 +156,7 @@ export const rules = {
                 stepStrictly: false, // 严格步数,只能输入 step 的倍数
                 precision: undefined, // 精度,设置计数器最小值
                 controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
-                size: "mini",
+                size: "default",
             }
         ]
     }

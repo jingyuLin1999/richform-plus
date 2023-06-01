@@ -12,7 +12,7 @@ export const attribute = {
             {
                 title: "标题",
                 name: "title",
-                size: "small",
+                size: "default",
                 widget: "input"
             },
         ],

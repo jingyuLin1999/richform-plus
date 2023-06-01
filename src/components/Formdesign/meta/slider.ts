@@ -7,7 +7,7 @@
         maximum: 10, // 最大值
         showStop: false, // 显示间断点
         showInput: false, // 是否显示输入框，仅在非范围选择时有效
-        inputSize: "", // large / medium / small / mini
+        inputSize: "", // large / large / default / small
         showInputControls: false, // 在显示输入框的情况下，是否显示输入框的控制按钮
         showRange: false, // 是否为范围选择,此时value必须为 [2,58]
         vertical: false,
@@ -131,7 +131,7 @@ export const attribute = {
                             name: "height",
                             title: "高度",
                             widget: "input",
-                            size: "small",
+                            size: "default",
                             hideRely: "vertical == false",
                         }
                     ]
@@ -141,7 +141,7 @@ export const attribute = {
                 title: "尺寸",
                 widget: "select",
                 name: "inputSize",
-                size: "small",
+                size: "default",
                 hideRely: "showInput == false",
                 options: [
                     {
@@ -149,15 +149,15 @@ export const attribute = {
                         label: "超大",
                     },
                     {
-                        value: "medium",
+                        value: "large",
                         label: "大",
                     },
                     {
-                        value: "small",
+                        value: "default",
                         label: "中",
                     },
                     {
-                        value: "mini",
+                        value: "small",
                         label: "小",
                     },
                 ],

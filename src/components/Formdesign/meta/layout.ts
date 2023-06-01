@@ -57,7 +57,7 @@ export const widgets = [
         isButton: false,
         disabled: false,
         border: true,
-        size: "small",
+        size: "default",
         fill: "#409EFF",
         textColor: "#fff",
         hideRely: [],
@@ -87,7 +87,7 @@ export const widgets = [
         isGroup: true,
         isButton: false,
         chooseAll: true,
-        size: "medium",
+        size: "large",
         max: 10000,
         min: 0,
         default: [],
@@ -189,7 +189,7 @@ export const widgets = [
         readOnly: false,
         disabled: false,
         clearable: true, // 是否显示清除按钮
-        size: "", // medium / small / mini
+        size: "", // large / default / small
         editable: false, // 文本框可输入
         placeholder: "请选择", // 单个
         format: "", // 显示的格式,注意和type配套
@@ -247,8 +247,8 @@ export const widgets = [
         name: "imageFile",
         tips: "", // 提示
         listType: "picture-card", // 可选 text/picture/picture-card
-        actions: "http://127.0.0.1:8080/manage/minio/upload.do", // 上传路径
-        deleteUrl: "http://127.0.0.1:8080/manage/minio/removeFile.do", // 删除路径
+        actions: "http://127.0.0.1:8080/manage/smallo/upload.do", // 上传路径
+        deleteUrl: "http://127.0.0.1:8080/manage/smallo/removeFile.do", // 删除路径
         draggable: true, // 是否可拖拽
         multiple: true, // 多选
         autoUpload: true, // 是否在选取文件后立即进行上传
@@ -261,7 +261,7 @@ export const widgets = [
         title: "图标",
         widget: "icon",
         name: "icon",
-        size: "small",
+        size: "default",
         disabled: false,
         fontSize: "13px",
         hideRely: [],
