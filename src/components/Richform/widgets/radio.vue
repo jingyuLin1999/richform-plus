@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import baseMixin from "./baseMixin";
 import eventbus from "../utils/eventbus";
 import { ElRadio, ElRadioGroup, ElRadioButton } from "element-plus";

@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import baseMixin from "./baseMixin";
 import { ElSlider } from "element-plus";
 export default {

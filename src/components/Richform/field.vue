@@ -74,7 +74,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { path, pick } from "ramda";
 import { defineComponent, toRaw } from "vue";
 import { ElTooltip } from "element-plus";
@@ -169,19 +169,18 @@ export default defineComponent({
     },
     pickSchema() {
       // schema不是必须的,若无field就无法查找
-      let rawSchema = toRaw(this.schema);
       if (
-        Object.keys(rawSchema).length == 0 ||
+        Object.keys(this.schema).length == 0 ||
         !Object.keys(this.field).length
       )
-        return;
+        return {};
       let schemaKeys = this.field.name
         .split(".")
         .join(".properties.")
         .split(".");
       schemaKeys.unshift("properties");
       let lastPropIdx = schemaKeys.lastIndexOf("properties");
-      let schemaObj = rawSchema;
+      let schemaObj = this.schema;
       for (let index = 0; index < schemaKeys.length; index++) {
         let key = schemaKeys[index];
         let value = schemaObj[key];
@@ -198,12 +197,11 @@ export default defineComponent({
         }
       }
       if (!this.fieldGrandfatherSchema)
-        this.fieldGrandfatherSchema = rawSchema;
+        this.fieldGrandfatherSchema = this.schema;
       this.fieldSchema = schemaObj;
     },
     pickRequireds() {
-      let rawFieldSchema = toRaw(this.fieldSchema);
-      if (!rawFieldSchema.require && !this.field.require) return;
+      if (!this.fieldSchema.require && !this.field.require) return;
       if (!this.requireds.includes(this.field.name))
         this.requireds.push(this.field.name);
       // 添加到对应scheme的required字段
@@ -392,7 +390,7 @@ export default defineComponent({
       >.field-question {
         color: #13ce66;
         cursor: pointer;
-        margin: 0 5px;
+        margin: 0 2px;
       }
     }
 

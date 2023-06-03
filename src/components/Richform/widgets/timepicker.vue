@@ -15,7 +15,7 @@
 </template>
 
 
-<script>
+<script lang="ts">
 import baseMixin from "./baseMixin";
 import { ElTimeSelect, ElTimePicker } from "element-plus";
 export default {

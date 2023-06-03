@@ -6,7 +6,7 @@
   </ElCascader>
 </template>
 
-<script>
+<script lang="ts">
 import { ElCascader } from "element-plus";
 import baseMixin from "./baseMixin";
 export default {

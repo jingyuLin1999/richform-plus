@@ -6,7 +6,7 @@
   <Input v-model="inputVal" :placeholder="placeholder"></Input>
 </template>
 
-<script>
+<script lang="ts">
 import { Input } from "element-plus";
 export default {
   props: {

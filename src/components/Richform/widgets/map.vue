@@ -56,7 +56,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { Input } from "element-plus";
 import {
   BaiduMap,

@@ -9,7 +9,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import 'dayjs/locale/zh-cn'
 import baseMixin from "./baseMixin";
 import { ElDatePicker } from "element-plus";

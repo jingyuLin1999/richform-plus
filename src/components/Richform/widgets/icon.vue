@@ -22,7 +22,7 @@
   </ElPopover>
 </template>
 
-<script>
+<script lang="ts">
 import baseMixin from "./baseMixin";
 import { ElPopover, ElButton } from "element-plus";
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'

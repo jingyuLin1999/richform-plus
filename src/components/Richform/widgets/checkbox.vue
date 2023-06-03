@@ -24,7 +24,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import baseMixin from "./baseMixin";
 import { ElCheckbox, ElCheckboxButton, ElCheckboxGroup } from "element-plus";
 export default {

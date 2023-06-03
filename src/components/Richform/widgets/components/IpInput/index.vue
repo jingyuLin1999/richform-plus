@@ -27,7 +27,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // 用法
 // import VueIpInput from 'vue-ip-input';
 

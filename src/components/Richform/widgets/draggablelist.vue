@@ -54,7 +54,7 @@
     </div>
   </dl>
 </template>
-<script>
+<script lang="ts">
 import baseMixin from "./baseMixin";
 import Draggable from "vuedraggable";
 import Expression from "./expression.vue";

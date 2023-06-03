@@ -46,7 +46,7 @@
           </div>
         </template>
         <template #center>
-          <!-- {{design.values}} -->
+          <!-- {{ design.values }} -->
           <!-- {{ attribute.values }} -->
           <!-- {{ this.design.schema.properties }} -->
           <RichForm class="design-canvas" :isDesign="isDesign" :schema="design.schema" :form="design.form"
@@ -69,7 +69,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import RichForm from "../Richform/index.vue";
 import Draggable from "vuedraggable";
 import { mergeDeepRight, clone } from "ramda";
@@ -176,8 +176,8 @@ export default {
         this.designItem = item;
         // 不能使用import，否则build后的包会出错
         let { attribute, rules } = await import(`./meta/${item.widget}.ts`);
-        this.setAttribute(item, attribute);
         this.setRules(item, rules);
+        this.setAttribute(item, attribute);
       } catch (e) {
         this.attribute.form = {};
         console.warn("加载表单字段元数据错误：" + e);
@@ -205,10 +205,13 @@ export default {
       let curRules = this.design.schema.properties;
       let ruleValue = rulesMeta.values;
       if (curRules[item.name]) {
-        mergeDeepRight(ruleValue, curRules[item.name]);
+        for (let key in ruleValue) {
+          if (!curRules[item.name][key]) {
+            curRules[item.name][key] = ruleValue[key]
+          }
+        }
       }
-      this.design.schema.properties[item.name] = ruleValue;
-      this.rules.values = this.design.schema.properties[item.name];
+      this.rules.values = curRules[item.name];
       this.rules.form = rulesMeta.form
     },
     // 布局克隆前预设处理

@@ -4,7 +4,7 @@
   </ElColorPicker>
 </template>
 
-<script>
+<script lang="ts">
 import baseMixin from "./baseMixin";
 import { ElColorPicker } from "element-plus";
 export default {

@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import baseMixin from "./baseMixin";
 import { ElInputNumber } from "element-plus";
 export default {

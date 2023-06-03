@@ -2,7 +2,7 @@
   <div class="multiexp-widget"></div>
 </template>
 
-<script>
+<script lang="ts">
 export default {};
 </script>
 

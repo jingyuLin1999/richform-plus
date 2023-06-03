@@ -29,7 +29,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import baseMixin from "./baseMixin";
 import { ElInput, ElButton, ElPopover } from "element-plus";
 import { PerfectScrollbar } from "vue3-perfect-scrollbar";

@@ -29,7 +29,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { type } from "ramda";
 import baseMixin from "./baseMixin";
 import { strToObj } from "../utils";
@@ -38,15 +38,6 @@ import { ElSelect, ElOption, ElOptionGroup } from "element-plus";
 export default {
   mixins: [baseMixin],
   components: { ElSelect, ElOption, ElOptionGroup },
-  watch: {
-    // 多选和单选切换，value数据类型需跟着转换
-    "field.multiple"(newVal) {
-      // console.log(this.value)
-      // if (newVal && !Array.isArray(this.value)) {
-      //   this.value = [];
-      // } 
-    },
-  },
   computed: {
     // 有可能是直接给个数组字符串格式，需要转化一下
     friendOptions() {
@@ -117,15 +108,21 @@ export default {
         join.length > 0 &&
         typeof value == "string" &&
         value.length > 0
-      ) {
+      ) { // 如： "1.36"
         value = value.split(join);
-      } else if (typeof value == "string") {
+      } else if (multiple && typeof value == "string" && value.length > 0) { // 如： "[2]"
         value = strToObj(value); // 友好转换一下
+        if (!Array.isArray(value)) value = [value]; 
+      } else if (multiple && !Array.isArray(value)) {
+        value = [];
+      } else if (value == null) {
+        value = "";
       }
       return value;
     },
     beforeChange(value) {
       let { multiple, join, forceType } = this.field;
+      console.log(this.schema.type)
       if (
         typeof value == "string" &&
         (forceType == "number" || this.schema.type == "number")

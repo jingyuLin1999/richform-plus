@@ -34,7 +34,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, defineAsyncComponent } from "vue";
 import DesignMixin from "../utils/designMixin";
 import { ElTabs, ElTabPane } from "element-plus";

@@ -16,7 +16,10 @@ import { baseForm, baseLayout } from "./base";
 export const attribute = {
     schema: {},
     values: {
-        // type: "string"
+        size: "default",
+        disabled: false,
+        clearable: true,
+        multiple: false,
     },
     form: {
         ...baseForm,
@@ -47,6 +50,13 @@ export const attribute = {
                         label: "小",
                     },
                 ],
+            },
+            {
+                title: "分隔符",
+                name: "join",
+                size: "default",
+                widget: "input",
+                description: "当为多选时，若设置了分隔符,则会转换成字符串"
             },
             {
                 title: "选项",
@@ -111,7 +121,8 @@ export const attribute = {
                             inactiveColor: "#ccc", // 取消背景颜色
                             activeValue: true, // 打开的值，支持Boolean, String或Number
                             inactiveValue: false, // 关闭的值，支持Boolean, String或Number
-                            hideRely: "type==string"
+                            hideRely: "type==string",
+                            description: "true时校验规则类型请选择数组，false时请选择字符串",
                         }
                     ]
                 ]
@@ -143,6 +154,10 @@ export const rules = {
                     {
                         value: "array",
                         label: "数组",
+                    },
+                    {
+                        value: "number",
+                        label: "数字",
                     },
                 ],
             },

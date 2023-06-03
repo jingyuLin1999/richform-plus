@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
 import eventbus from "./utils/eventbus";
 import { ElButton } from "element-plus";

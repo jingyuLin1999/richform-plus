@@ -6,7 +6,7 @@
     :score-template="field.scoreTemplate"></ElRate>
 </template>
 
-<script>
+<script lang="ts">
 import baseMixin from "./baseMixin";
 import { ElRate } from "element-plus";
 
