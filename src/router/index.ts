@@ -12,6 +12,11 @@ const routes = [
         name: 'form-design',
         component: () => import('@/examples/form-design.vue')
     },
+    {
+        path: '/deep-values',
+        name: 'deep-values',
+        component: () => import('@/examples/deep-values.vue')
+    },
 ]
 
 const router = createRouter({

@@ -31,9 +31,9 @@
         <ElTooltip v-if="fieldSchema.description || field.description"
           :content="fieldSchema.description || field.description" class="field-question" placement="bottom"
           :effect="isDark ? 'dark' : 'light'">
-          <el-icon class="field-question">
+          <ElIcon class="field-question">
             <QuestionFilled />
-          </el-icon>
+          </ElIcon>
         </ElTooltip>
       </div>
       <div v-if="form.grid && form.labelInline" v-show="isShyTitle" class="label-right-border"
@@ -48,28 +48,28 @@
           @buttonEvent="onButtonEvent" />
         <!-- 错误信息 -->
         <div class="error-message" v-if="fieldErrors[field.name] && field.showError != false">
-          <i class="el-icon-warning-outline"></i>
+          <i class="ElIcon-warning-outline"></i>
           <span>{{ fieldErrors[field.name] }}</span>
         </div>
       </div>
     </div>
     <!--拖拽-->
     <span class="design-draggable design-handle-move" v-if="isDesign && field.isClicked">
-      <el-icon>
+      <ElIcon>
         <Rank />
-      </el-icon>
+      </ElIcon>
     </span>
     <!--复制-->
     <span class="design-copy" @click="onCopyItem(schema)" v-if="isDesign && field.isClicked">
-      <el-icon>
+      <ElIcon>
         <CopyDocument />
-      </el-icon>
+      </ElIcon>
     </span>
     <!--删除-->
     <span class="design-delete" v-if="isDesign && field.isClicked" @click="onDeleteItem(form, field)">
-      <el-icon>
+      <ElIcon>
         <Delete />
-      </el-icon>
+      </ElIcon>
     </span>
   </div>
 </template>
@@ -77,17 +77,18 @@
 <script lang="ts">
 import { path, pick } from "ramda";
 import { defineComponent, toRaw } from "vue";
-import { ElTooltip } from "element-plus";
 import eventbus from "./utils/eventbus";
 import { defineAsyncComponent } from 'vue';
 import DesignMixin from "./utils/designMixin";
 import CommonMixin from "./utils/commonMixin";
+import { ElTooltip, ElIcon } from "element-plus";
 import elementResizeDetectorMaker from "element-resize-detector";
 import AJV, { localize as localizeErrors } from "./utils/validator";
+import { QuestionFilled, Rank, CopyDocument, Delete } from '@element-plus/icons-vue'
 
 export default defineComponent({
   name: "field",
-  components: { ElTooltip },
+  components: { ElTooltip, ElIcon, QuestionFilled, Rank, CopyDocument, Delete },
   inject: [
     "globalVars",
     "dependencies",

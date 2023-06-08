@@ -37,11 +37,12 @@
 <script lang="ts">
 import { defineComponent, defineAsyncComponent } from "vue";
 import DesignMixin from "../utils/designMixin";
-import { ElTabs, ElTabPane } from "element-plus";
+import { ElIcon, ElTabs, ElTabPane } from "element-plus";
+import { Rank, CopyDocument, Delete } from '@element-plus/icons-vue'
 export default defineComponent({
   name: "tabs-layout",
   mixins: [DesignMixin],
-  components: { ElTabs, ElTabPane },
+  components: { ElTabs, ElTabPane, ElIcon, Rank, CopyDocument, Delete },
   props: {
     tabsItem: { type: Object, default: () => ({}) },
   },

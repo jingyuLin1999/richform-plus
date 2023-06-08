@@ -40,6 +40,7 @@ http://localhost:8080/#/
 [富表单完整功能](http://localhost:8080/#/form-design )   
 http://localhost:8080/#/form-design   
 
+
 ## 用法
 ```
 npm i richform@next -S
@@ -212,4 +213,19 @@ layout: [{
   name: "title.text",
 }]
 ```
-[例子](http://117.73.12.76/demo/richform/#/deep-values )  
+
+## 项目运行
+```
+npm install
+```
+
+### 开发模式下编译和热重载
+```
+npm run serve
+```
+
+### 生产模式下打包
+```
+npm run build
+```
+

@@ -41,11 +41,7 @@
     <!-- first panal -->
     <transition name="togglePanel">
       <perfect-scrollbar :class="[direction, 'first', 'panel', 'vsecond-bg']" v-if="hasFirstPanel" v-show="firstIsShow"
-        :style="
-          direction == 'hori'
-            ? { width: firstPanelSize }
-            : { height: firstPanelSize }
-        ">
+        :style="direction == 'hori' ? { width: firstPanelSize } : { height: firstPanelSize }">
         <slot name="first"></slot>
       </perfect-scrollbar>
     </transition>

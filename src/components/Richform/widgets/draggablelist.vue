@@ -56,14 +56,14 @@
 </template>
 <script lang="ts">
 import baseMixin from "./baseMixin";
-import Draggable from "vuedraggable";
 import Expression from "./expression.vue";
-import { Operation, Minus } from '@element-plus/icons-vue'
+import Draggable from 'vuedraggable/src/vuedraggable'; 
+import { Operation, Minus, Remove } from '@element-plus/icons-vue'
 import { ElInput, ElColorPicker, ElSelect, ElOption, ElIcon } from "element-plus";
 export default {
   name: "DraggableListWidget",
   mixins: [baseMixin],
-  components: { Draggable, ElInput, ElColorPicker, ElSelect, ElOption, Expression, ElIcon },
+  components: { Draggable, ElInput, ElColorPicker, ElSelect, ElOption, Expression, ElIcon, Operation, Minus, Remove },
   data() {
     return {
       id: 1,

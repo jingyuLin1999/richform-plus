@@ -761,7 +761,7 @@ export default {
                         readOnly: false,
                         disabled: false,
                         clearable: true, // 是否显示清除按钮
-                        size: "", // medium / small / mini
+                        size: "", // default / small / mini
                         editable: false, // 文本框可输入
                         placeholder: "请选择", // 单个
                         // format: "", // 显示的格式,注意和type配套

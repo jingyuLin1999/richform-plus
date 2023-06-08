@@ -8,7 +8,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "default",
+  name: "custom",
   props: {
     fields: { type: Array, default: () => [] },
     form: { type: Object, default: () => ({}) },

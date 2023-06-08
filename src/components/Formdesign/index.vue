@@ -71,12 +71,11 @@
 
 <script lang="ts">
 import RichForm from "../Richform/index.vue";
-import Draggable from "vuedraggable";
 import { mergeDeepRight, clone } from "ramda";
 import SplitLayout from "../SplitLayout/index.vue";
 import { layout, widgets } from "./meta/layout";
 import { ElTabs, ElTabPane } from "element-plus";
-
+import Draggable from 'vuedraggable/src/vuedraggable'; 
 
 export default {
   name: "FormDesign",
@@ -229,7 +228,7 @@ export default {
   },
 };
 // 加载表单元数据，供外部调用
-// function loadMetas() {
+function loadMetas() {
 //   const metaFiles = require.context("./meta", true, /\.js$/);
 //   const modules = metaFiles.keys().reduce((modules, modulePath) => {
 //     const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, "$1");
@@ -238,8 +237,8 @@ export default {
 //     return modules;
 //   }, {});
 //   return modules;
-// }
-// export const FormMetas = loadMetas();
+}
+export const FormMetas = loadMetas();
 </script>
 
 <style lang="scss">

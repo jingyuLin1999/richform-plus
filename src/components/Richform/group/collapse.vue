@@ -25,21 +25,21 @@
     </ElCollapse>
     <!--拖拽-->
     <span class="design-draggable design-handle-move" v-if="isDesign && collapse.isClicked">
-      <el-icon>
+      <ElIcon>
         <Rank />
-      </el-icon>
+      </ElIcon>
     </span>
     <!--复制-->
     <span class="design-copy" @click="onCopyItem(schema)" v-if="isDesign && collapse.isClicked">
-      <el-icon>
+      <ElIcon>
         <CopyDocument />
-      </el-icon>
+      </ElIcon>
     </span>
     <!--删除-->
     <span class="design-delete" @click="onDeleteItem(form, collapse)" v-if="isDesign && collapse.isClicked">
-      <el-icon>
+      <ElIcon>
         <Delete />
-      </el-icon>
+      </ElIcon>
     </span>
   </div>
 </template>
@@ -47,11 +47,13 @@
 <script lang="ts">
 import { defineComponent, defineAsyncComponent } from "vue";
 import DesignMixin from "../utils/designMixin";
-import { ElCollapse, ElCollapseItem } from "element-plus";
+import { ElCollapse, ElCollapseItem, ElIcon } from "element-plus";
+import { Rank, CopyDocument, Delete } from '@element-plus/icons-vue';
+
 export default defineComponent({
   name: "collapse",
   mixins: [DesignMixin],
-  components: { ElCollapse, ElCollapseItem },
+  components: { ElCollapse, ElIcon, ElCollapseItem, Rank, CopyDocument, Delete },
   props: {
     collapse: { type: Object, default: () => ({}) },
   },

@@ -40,7 +40,8 @@ import FieldGroup from "./group/default.vue";
 import FieldTabs from "./group/tabs.vue";
 import FieldGrid from "./group/grid.vue";
 import FieldCollapse from "./group/collapse.vue";
-import Draggable from "vuedraggable";
+/** https://github.com/SortableJS/vue.draggable.next/issues/117#issuecomment-1019627432 */ 
+import Draggable from 'vuedraggable/src/vuedraggable'; 
 import DragMixin from "./utils/designMixin";
 import { defineComponent } from "vue";
 

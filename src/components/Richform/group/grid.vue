@@ -26,21 +26,21 @@
     </div>
     <!--拖拽-->
     <span class="design-draggable design-handle-move" v-if="isDesign && gridItem.isClicked">
-      <el-icon>
+      <ElIcon>
         <Rank />
-      </el-icon>
+      </ElIcon>
     </span>
     <!--复制-->
     <span class="design-copy" @click="onCopyItem(schema)" v-if="isDesign && gridItem.isClicked">
-      <el-icon>
+      <ElIcon>
         <CopyDocument />
-      </el-icon>
+      </ElIcon>
     </span>
     <!--删除-->
     <span class="design-delete" @click="onDeleteItem(form, gridItem)" v-if="isDesign && gridItem.isClicked">
-      <el-icon>
+      <ElIcon>
         <Delete />
-      </el-icon>
+      </ElIcon>
     </span>
   </div>
 </template>
@@ -48,10 +48,13 @@
 <script lang="ts">
 import { defineComponent, defineAsyncComponent } from "vue";
 import DesignMixin from "../utils/designMixin";
+import { ElIcon } from "element-plus";
+import { Rank, CopyDocument, Delete } from '@element-plus/icons-vue'
 
 export default defineComponent({
   name: "grid-layout",
   mixins: [DesignMixin],
+  components: { ElIcon, Rank, CopyDocument, Delete },
   props: {
     gridItem: { type: Object, default: () => ({}) },
   },

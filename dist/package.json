@@ -1,0 +1,24 @@
+{
+  "name": "richform",
+  "version": "0.0.0",
+  "description": "基于element的表单、表单设计器",
+  "main": "lib/richform.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ljy",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jingyuLin1999/richform-plus.git"
+  },
+  "keywords": [
+    "richform",
+    "form",
+    "formdesign",
+    "workflow"
+  ]
+}
