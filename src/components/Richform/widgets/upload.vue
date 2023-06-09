@@ -2,39 +2,35 @@
   <div class="upload-widget" :id="widgetId">
     <div class="upload-type" v-if="field.showType">
       <span class="type-label" :style="{ color: colors.fontColor }">上传类型：</span>
-      <elSwitch style="display: block" v-model="field.type" active-color="#13ce66" inactive-color="#ff4949"
-        active-text="文件夹" inactive-text="文件" active-value="folder" inactive-value="file">
+      <elSwitch v-model="field.type" active-color="#13ce66" inactive-color="#ff4949" active-text="文件夹" inactive-text="文件"
+        active-value="folder" inactive-value="file">
       </elSwitch>
     </div>
     <ElUpload ref="uploadWidget" class="upload-wrapper" :name="field.name" :list-type="field.listType"
       :file-list="fileList" :drag="field.draggable && field.listType == 'text'" :action="field.actions"
       :multiple="field.multiple" :auto-upload="field.autoUpload" :headers="header" :limit="field.limit"
       :disabled="field.disabled" :show-file-list="field.showFileList" :accept="field.accept"
-      :before-remove="onBeforeRemove" :on-success="onSuccess" :on-remove="onRemoveSuccess">
-      <ElButton v-if="field.listType == 'picture'" size="small" type="primary">点击上传</ElButton>
-      <i v-else-if="field.listType == 'picture-card'" slot="default" class="el-icon-plus"></i>
+      :before-remove="onBeforeRemove" :on-success="onSuccess" :on-remove="onRemoveSuccess"
+      :on-preview="pictureCardPreview">
+      <ElButton v-if="field.listType == 'picture'" size="default" type="primary">点击上传</ElButton>
+      <ElIcon v-else-if="field.listType == 'picture-card'" class="avatar-uploader-icon">
+        <Plus />
+      </ElIcon>
       <div v-else-if="field.listType == 'text'">
-        <i class="el-icon-upload"></i>
+        <ElIcon class="el-icon--upload">
+          <UploadFilled />
+        </ElIcon>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
       </div>
-      <div v-if="field.tips.length > 0" class="el-upload__tip" slot="tip">
-        {{ field.tips }}
-      </div>
-      <!-- 查看详情 -->
-      <div v-if="field.listType == 'picture-card'" slot="file" slot-scope="{ file }">
-        <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-        <span class="el-upload-list__item-actions">
-          <span class="el-upload-list__item-preview">
-            <i class="el-icon-zoom-in" @click="pictureCardPreview(file)"></i>
-          </span>
-          <span v-if="!field.disabled" class="el-upload-list__item-delete">
-            <i class="el-icon-delete" @click="onBeforeRemove(file, true)"></i>
-          </span>
-        </span>
-      </div>
+      <template v-if="field.tips.length > 0" #tip>
+        <div class="el-upload__tip">
+          {{ field.tips }}
+        </div>
+      </template>
     </ElUpload>
-    <ElDialog :visible.sync="dialogVisible">
-      <img width="100%" :src="dialogImageUrl" alt="" />
+    <!-- 查看详情 -->
+    <ElDialog v-model="dialogVisible">
+      <img w-full :src="dialogImageUrl" alt="Preview Image" />
     </ElDialog>
   </div>
 </template>
@@ -42,17 +38,19 @@
 <script lang="ts">
 import baseMixin from "./baseMixin";
 import {
+  ElIcon,
   ElUpload,
-  ElMessage,
   ElButton,
   ElDialog,
+  ElMessage,
   ElSwitch as elSwitch,
 } from "element-plus";
+import { UploadFilled, Plus } from '@element-plus/icons-vue'
 import { loadDict } from "../utils/index";
 
 export default {
   mixins: [baseMixin],
-  components: { ElUpload, ElMessage, ElButton, ElDialog, elSwitch },
+  components: { ElUpload, ElMessage, ElButton, ElDialog, elSwitch, ElIcon, UploadFilled, Plus },
   data() {
     return {
       header: {
@@ -95,10 +93,22 @@ export default {
           originalFilename: "filename", // 返回字段 value字段
           fileSize: "filesize",
         },
+        removeFunc: null, // 删除自定义函数,返回一个异步函数
+        uploadFunc: null, // 上传自定义函数,返回一个异步函数
+        /*
+         function (file, config) {
+          return new Promise((resolve, reject) => {
+            loadDict(config.deleteUrl, file).then((response) => {
+            });
+            resolve()
+          }).catch((error) => {
+            reject();
+          });
+        */
       };
     },
-    pictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
+    pictureCardPreview(uploadFile) {
+      this.dialogImageUrl = uploadFile.url;
       this.dialogVisible = true;
     },
     // 改变上传的是文件夹还是文件
@@ -163,33 +173,26 @@ export default {
       if (fileName) this.values[mapValues.originalFilename] = fileName;
       if (fileSize) this.values[mapValues.fileSize] = fileSize;
     },
-    getRemoveParams(file) {
-      let url = file.path || file.url;
-      let reg =
-        /^(?:([A-Za-z]+):)?(?:\/{0,3})([A-Zaz.\-0-9]+)(?::(\d+))?(\/[^#?]*)?(?:\?([^#]*))?(?:#(.*))?$/;
-      let result = reg.exec(url);
-      let arr = result[4].split("/");
-      arr = arr.filter((item) => item != "");
-      return { bucketName: arr[0], fileName: arr[1] };
-    },
-    onBeforeRemove(file, isManual = false) {
-      return new Promise((resolve, reject) => {
-        let rqData = this.getRemoveParams(file);
-        loadDict(this.field.deleteUrl, rqData)
-          .then((response) => {
-            if (response.status != 200) {
-              Message({
-                type: "error",
-                message: `删除失败，${response.msg}`,
-              });
+    onBeforeRemove(file) {
+      // 发送完整路径，后端可能是分布式的
+      return typeof this.field.removeFunc == "function" ?
+        this.field.removeFunc(file, this.field) :
+        new Promise((resolve, reject) => {
+          loadDict(this.field.deleteUrl, file)
+            .then((response) => {
+              if (response.status != 200) {
+                Message({
+                  type: "error",
+                  message: `删除失败，${response.msg}`,
+                });
+                reject();
+              }
+              resolve();
+            })
+            .catch((error) => {
               reject();
-            }
-            resolve();
-          })
-          .catch((error) => {
-            reject();
-          });
-      });
+            });
+        });
     },
     onRemoveSuccess(file, fileList) {
       this.pickValues(fileList);

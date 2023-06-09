@@ -122,7 +122,6 @@ export default {
     },
     beforeChange(value) {
       let { multiple, join, forceType } = this.field;
-      console.log(this.schema.type)
       if (
         typeof value == "string" &&
         (forceType == "number" || this.schema.type == "number")

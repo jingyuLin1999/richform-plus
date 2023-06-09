@@ -144,7 +144,7 @@ export default {
                 selectMultiple: `["选项1", "选项2"]`,
                 rate: 4,
                 imageFile: [
-                    "http://127.0.0.1:9000/images/5c3c1e7416fe46d687f6c0bd8cebdae8.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin%2F20230330%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230330T085557Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=a4012cbb3b7e8eeb35885fb2ba02a5f650fafac477a5a006d0a5402a312bb646",
+                    "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100?X-Am",
                 ],
                 filename: "a.png",
                 tree: "22",
@@ -167,7 +167,7 @@ export default {
                     // btnColor: "#F8F4F4",
                     // btnBgColor: "#040C19",
                     // activeColor: "#4F9FFE",
-                    // dateRangeBgColor: "#999",
+                    // dateRangeBgColor: "#131B2C",
                     // multiOptionBgColor: "#ddd",
                 },
                 actions: [
@@ -706,7 +706,7 @@ export default {
                                     widget: "upload",
                                     name: "imageFile",
                                     tips: "提示语句", // 提示
-                                    listType: "text", // 可选 text/picture/picture-card
+                                    listType: "picture-card", // 可选 text/picture/picture-card
                                     actions: "http://127.0.0.1:8080/manage/minio/upload.do", // 上传路径
                                     deleteUrl: "http://127.0.0.1:8080/manage/minio/removeFile.do", // 删除路径
                                     draggable: true, // 是否可拖拽
@@ -1143,7 +1143,7 @@ export default {
                 btnColor: "#F8F4F4",
                 btnBgColor: "#040C19",
                 activeColor: "#4F9FFE",
-                dateRangeBgColor: "#999",
+                dateRangeBgColor: "#131B2C",
                 multiOptionBgColor: "#ddd",
             };
         },

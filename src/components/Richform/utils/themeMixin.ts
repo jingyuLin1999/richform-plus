@@ -3,7 +3,7 @@ const ORIGINAL_THEME = '#409EFF' // default color
 export default {
     data() {
         return {
-            originalColors: ['#409EFF', "#303133", "#606266", "#DCDFE6", "#E4E7ED", "#EBEEF5", "#F2F6FC", "#f4f4f5", "#fff", "#fff", "#fff", "#F5F7FA", "#303133"],
+            originalColors: ['#409EFF', "#303133", "#606266", "#DCDFE6", "#E4E7ED", "#EBEEF5", "#FFFFFF", "#f4f4f5", "#fff", "#fff", "#fff", "#F5F7FA", "#303133"],
         }
     },
     watch: {
@@ -71,8 +71,10 @@ export default {
                 newStyle = newStyle.replace(new RegExp(originalColors[4], 'ig'), fontColor) // border颜色 聚焦后的颜色
                 newStyle = newStyle.replace(new RegExp(originalColors[5], 'ig'), fontColor) // 穿梭框边颜色
             }
-            if (dateRangeBgColor.length > 0)
+            if (dateRangeBgColor.length > 0) {
+                newStyle = newStyle.replace(new RegExp(`--el-color-white:#ffffff`, 'ig'), `--el-color-white:#F5F6F9`); // 按钮字体颜色
                 newStyle = newStyle.replace(new RegExp(originalColors[6], 'ig'), dateRangeBgColor)  // 日期范围背景
+            }
             if (multiOptionBgColor.length > 0)
                 newStyle = newStyle.replace(new RegExp(originalColors[7], 'ig'), multiOptionBgColor) // 下拉框，多选的选项颜色
             if (theme.length > 0) {
@@ -80,8 +82,9 @@ export default {
                 newStyle = newStyle.replace(new RegExp(`background:${originalColors[8]}`, 'ig'), 'background:' + theme) // 下同
                 newStyle = newStyle.replace(new RegExp(`background-color:${originalColors[9]}`, 'ig'), 'background-color:' + theme)
             }
-            if (btnColor.length > 0)
+            if (btnColor.length > 0) {
                 newStyle = newStyle.replace(new RegExp(`color:${originalColors[10]}`, 'ig'), 'color:' + btnColor) // 按钮和滑块的字体颜色
+            }
             if (btnBgColor.length > 0)
                 newStyle = newStyle.replace(new RegExp(originalColors[11], 'ig'), btnBgColor)  // 穿梭框头部和inputnumber两边的颜色，下拉hover的背景颜色
 
