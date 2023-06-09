@@ -532,7 +532,7 @@ export default {
                                         title: "触发字典过滤",
                                         widget: "input",
                                         name: "product_code",
-                                        prefixIcon: "el-icon-search",
+                                        prefixIcon: "Search",
                                         prepend: "D", // 当type等于text有效
                                         append: "KB",
                                         description: "C42G-YN-CNC2-1",
@@ -878,6 +878,7 @@ export default {
                         name: "tree",
                         isShowCheckbox: false,
                         onlyCheckedKeys: false,
+                        editable: true,
                         nodeKey: "value",
                         options: [
                             {

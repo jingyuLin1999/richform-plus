@@ -27,22 +27,29 @@
           </div>
           <!-- 工具 -->
           <span class="tools">
-            <ElTooltip class="tool-item" popper-class="perfect-tree-tool-tip" :open-delay="200"
-              v-if="node.level == 1 && field.addSibling" content="添加兄弟点" :enterable="false" placement="top-end"
-              effect="light">
-              <i class="el-icon-circle-plus-outline" @click="addSibling()"></i>
+            <ElTooltip popper-class="perfect-tree-tool-tip" :open-delay="200" v-if="node.level == 1 && field.addSibling"
+              content="添加兄弟点" :enterable="false" placement="top-end" effect="light">
+              <ElIcon @click="addSibling()" class="tool-item">
+                <CirclePlus />
+              </ElIcon>
             </ElTooltip>
-            <ElTooltip class="tool-item" popper-class="perfect-tree-tool-tip" :open-delay="200" v-if="field.addable"
-              content="添加" :enterable="false" placement="top-end" effect="light">
-              <i class="el-icon-plus" @click="addNodeModal(data, node)"></i>
+            <ElTooltip popper-class="perfect-tree-tool-tip" :open-delay="200" v-if="field.addable" content="添加"
+              :enterable="false" placement="top-end" effect="light">
+              <ElIcon @click="addNodeModal(data, node)" class="tool-item">
+                <Plus />
+              </ElIcon>
             </ElTooltip>
-            <ElTooltip class="tool-item" popper-class="perfect-tree-tool-tip" :open-delay="200" v-if="field.editable"
-              content="编辑" :enterable="false" placement="top-end" effect="light">
-              <i class="el-icon-edit-outline" @click="editNodeModal(data, node, $event)"></i>
+            <ElTooltip popper-class="perfect-tree-tool-tip" :open-delay="200" v-if="field.editable" content="编辑"
+              :enterable="false" placement="top-end" effect="light">
+              <ElIcon @click="editNodeModal(data, node, $event)" class="tool-item">
+                <Edit />
+              </ElIcon>
             </ElTooltip>
-            <ElTooltip class="tool-item" popper-class="perfect-tree-tool-tip" :open-delay="200" v-if="field.deletable"
-              content="删除" :enterable="false" placement="top-end" effect="light">
-              <i class="el-icon-delete" @click="onRemoveNode(data, node)"></i>
+            <ElTooltip popper-class="perfect-tree-tool-tip" :open-delay="200" v-if="field.deletable" content="删除"
+              :enterable="false" placement="top-end" effect="light">
+              <ElIcon @click="onRemoveNode(data, node)" class="tool-item">
+                <Delete />
+              </ElIcon>
             </ElTooltip>
           </span>
         </span>
@@ -54,10 +61,12 @@
         <label v-if="key != 'children'" class="field-label">{{ key }}:</label>
         <ElInput v-if="key != 'children'" size="small" v-model="template[key]" required></ElInput>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <ElButton @click="isModal = false" size="default">取 消</ElButton>
-        <ElButton type="primary" size="default" @click="onSureBtn">确 定</ElButton>
-      </span>
+      <template #footer>
+        <span class="dialog-footer">
+          <ElButton @click="isModal = false" size="default">取 消</ElButton>
+          <ElButton type="primary" size="default" @click="onSureBtn">确 定</ElButton>
+        </span>
+      </template>
     </Modal>
   </div>
 </template>
@@ -67,10 +76,12 @@ import "xe-utils";
 import { Modal } from "vxe-table";
 import "vxe-table/lib/style.css";
 import baseMixin from "./baseMixin";
-import { ElInput, ElButton, ElTree, ElTooltip, ElMessageBox } from "element-plus";
+import { ElInput, ElButton, ElTree, ElTooltip, ElMessageBox, ElIcon } from "element-plus";
+import { CirclePlus, Plus, Edit, Delete } from '@element-plus/icons-vue'
+
 export default {
   mixins: [baseMixin],
-  components: { Modal, ElInput, ElButton, ElTree, ElTooltip, ElMessageBox },
+  components: { Modal, ElInput, ElButton, ElTree, ElTooltip, ElMessageBox, ElIcon, CirclePlus, Plus, Edit, Delete },
   methods: {
     defaultFieldAttr() {
       return {
@@ -302,7 +313,7 @@ export default {
       display: flex;
 
       .tool-item {
-        padding-left: 10px;
+        margin-left: 7px;
         display: none;
       }
     }

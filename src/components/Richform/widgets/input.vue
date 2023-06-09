@@ -5,13 +5,13 @@
     'el-form-item',
     fieldErrors[field.name] ? 'is-error' : '',
   ]" v-model="value" :type="field.type" :placeholder="field.placeholder" :disabled="field.disabled"
-    :clearable="field.clearable" :show-password="field.showPassword" :prefix-icon="field.prefixIcon"
+    :clearable="field.clearable" :show-password="field.showPassword" :prefix-icon="ElementPlusIconsVue[field.prefixIcon]"
     :suffix-icon="field.suffixIcon" :rows="field.rows" :autosize="field.autosize" :size="field.size"
     :maxlength="field.maxLength" :minlength="field.minLength">
-    <template v-if="field.append.length > 0" slot="append">
+    <template v-if="field.append.length > 0" #append>
       {{ field.append }}
     </template>
-    <template v-if="field.prepend.length > 0" slot="prepend">
+    <template v-if="field.prepend.length > 0" #prepend>
       {{ field.prepend }}
     </template>
   </ElInput>
@@ -21,9 +21,16 @@
 import { defineComponent } from "vue";
 import baseMixin from "./baseMixin"; // 混入必须引入，一些公共逻辑放在该处
 import { ElInput } from "element-plus";
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+
 export default defineComponent({
   mixins: [baseMixin],
   components: { ElInput },
+  data() {
+    return {
+      ElementPlusIconsVue
+    }
+  },
   methods: {
     // 该组件的默认属性，下面字段可自行定义，且可根据this.field获取数据
     defaultFieldAttr() {

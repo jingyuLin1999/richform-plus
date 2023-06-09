@@ -2,10 +2,10 @@
   <div class="button-widget" :id="widgetId">
     <!-- 单按钮 -->
     <ElButton v-if="!field.isGroup" :type="field.type ? field.type : 'default'" :style="field.style" :size="field.size"
-      :loading="field.loading" :round="field.round" :plain="field.plain" :circle="field.circle" :icon="field.leftIcon"
-      :disabled="field.disabled" @click="emitAction(field)">
+      :loading="field.loading" :round="field.round" :plain="field.plain" :circle="field.circle"
+      :icon="ElementPlusIconsVue[field.leftIcon]" :disabled="field.disabled" @click="emitAction(field)">
       {{ schema.title || field.title }}
-      <ElIcon class="el-icon--right">
+      <ElIcon class="el-icon--right" v-if="field.rightIcon">
         <component :is="ElementPlusIconsVue[field.rightIcon]" />
       </ElIcon>
     </ElButton>

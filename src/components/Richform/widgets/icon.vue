@@ -13,8 +13,8 @@
     </ElButton>
     <template #reference>
       <ElButton :size="field.size" :disabled="field.disabled" :style="{ fontSize: field.fontSize }">
-        <span v-if="value == null">请选择</span>
-        <ElIcon class="el-icon--right">
+        <span v-if="value == ''">请选择</span>
+        <ElIcon v-else class="el-icon--right">
           <component :is="ElementPlusIconsVue[value]" />
         </ElIcon>
       </ElButton>
@@ -42,7 +42,7 @@ export default {
       };
     },
     clickIcon(val) {
-      this.value = this.latestIcon == val ? null : val;
+      this.value = this.latestIcon == val ? "" : val;
       this.latestIcon = this.value;
     },
     onSureIcon() {
